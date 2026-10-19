@@ -1,40 +1,38 @@
+<p align="center">
+  <img src="docs/logo.svg" alt="WaveBox logo" width="200">
+</p>
+
 # WaveBox
 
-Ricevitore audio Bluetooth basato su ESP32 con analizzatore di spettro in tempo reale su display OLED.
+Ricevitore audio Bluetooth basato su ESP32 con codec ES8388.
 
-L'ESP32 si presenta come cassa Bluetooth (A2DP sink), invia l'audio al codec via I2S e contemporaneamente calcola la FFT del segnale per disegnare 32 barre di spettro con indicatori di picco su un display SSD1322 256x64.
+L'ESP32 si presenta come cassa Bluetooth (A2DP sink), configura il codec ES8388 via I2C e gli invia l'audio via I2S.
+
+L'analizzatore di spettro su display OLED SSD1322 della versione precedente (branch `main`) non è presente in questo branch.
 
 ## Funzionalità
 
 - Ricezione audio Bluetooth A2DP, nome dispositivo **`RIKY-ESP32-AUDIO`**
-- Uscita audio I2S verso il codec
-- Analizzatore di spettro a 32 barre (FFT 256 punti, scala in dB da -70 a 0)
-- Barre smussate con filtro IIR e indicatori di picco con caduta lenta
-- Refresh del display a 60 fps
-- LED di stato: lampeggia quando non connesso, fisso quando connesso
-- Indicatore di connessione BT nell'angolo in alto a sinistra del display
+- Inizializzazione minima del codec ES8388 via I2C (indirizzo 0x10, con fallback a 0x11)
+- Uscita audio I2S a 16 bit verso il codec
+- Log su seriale di connessione Bluetooth e avvio/arresto dell'audio
 
 ## Hardware
 
-- Scheda ESP32 (`esp32dev`), es. ESP32 Audio Kit
-- Display OLED SSD1322 256x64 (SPI 4 fili)
-- Codec audio I2S
+- Scheda ESP32 (`esp32dev`), es. ESP32 Audio Kit (A1S)
+- Codec audio ES8388
 
 ### Collegamenti
 
 | Funzione        | GPIO |
 |-----------------|------|
-| OLED SCLK       | 18   |
-| OLED MOSI       | 23   |
-| OLED CS         | 5    |
-| OLED DC         | 0    |
-| OLED RESET      | 3V3 fisso |
 | I2S BCLK        | 27   |
-| I2S LRCK (WS)   | 25   |
-| I2S DOUT        | 26   |
-| LED di stato    | 2    |
+| I2S LRCK (WS)   | 26   |
+| I2S DOUT        | 25   |
+| I2C SDA         | 33   |
+| I2C SCL         | 32   |
 
-I pin I2S devono corrispondere a quelli del codec montato sulla scheda.
+I pin devono corrispondere a quelli del codec montato sulla scheda.
 
 ## Compilazione e caricamento
 
@@ -52,29 +50,16 @@ Dopo l'avvio, abbinare il telefono o il PC al dispositivo Bluetooth `RIKY-ESP32-
 
 Tutto il codice applicativo è in `src/main.cpp`:
 
-1. **Bluetooth A2DP (core 0)**: riceve il flusso PCM stereo, lo invia all'I2S e ne mette una copia mono in un ring buffer.
-2. **Task FFT (core 1)**: legge blocchi di 256 campioni, applica finestra di Hamming e FFT, e raggruppa i bin in 32 barre su scala logaritmica.
-3. **Task display (core 1)**: smussa le barre, gestisce i picchi e disegna il frame con U8g2.
-
-I parametri principali (numero di barre, range dB, modalità picchi `PEAK_MODE`, fps) sono costanti in testa a `src/main.cpp`.
+1. **Setup I2C**: cerca l'ES8388 sul bus e scrive i registri minimi (reset, alimentazione, formato I2S 16 bit, unmute, volume, uscite).
+2. **Bluetooth A2DP**: `BluetoothA2DPSink` riceve il flusso PCM e lo invia all'I2S; le callback stampano sulla seriale lo stato della connessione e dell'audio.
 
 ## Librerie
 
-- [U8g2](https://github.com/olikraus/u8g2): display
 - [ESP32-A2DP](https://github.com/pschatzmann/ESP32-A2DP): Bluetooth audio
-- [ArduinoFFT](https://github.com/kosme/arduinoFFT): FFT
-- [arduino-audiokit](https://github.com/pschatzmann/arduino-audiokit) e [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools)
+- [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools)
 
-In `lib/` sono incluse copie locali di ESP32-A2DP, arduino-audiokit e arduino-audio-tools, che hanno la precedenza su quelle scaricate da `lib_deps`.
-
-### Librerie in `src/libraries/` (branch `tentativo_02`)
-
-- **kiss-fft**: FFT reale/complessa leggera in C
-- **kernel**: trasformata a Q costante (`cq_kernel`, di Kenny Peng) basata su kiss-fft, più i buffer `doubleBuffer` / `fftBuffer` (`buffer.h`)
-- **ssd-1322-gfx**: driver SSD1322 256x64 per Adafruit GFX (fork di venice1200 della libreria Adafruit SSD1327)
-
-Non sono ancora usate da `src/main.cpp`. Dettagli e stato in [docs/tentativo_02.md](docs/tentativo_02.md).
+In `lib/` è inclusa una copia locale di ESP32-A2DP (1.8.8), che ha la precedenza su quella scaricata da `lib_deps`. `src/main.cpp` usa l'API `set_pin_config(i2s_pin_config_t)`, presente in questa versione.
 
 ## Documentazione
 
-- [docs/tentativo_02.md](docs/tentativo_02.md): modifiche del branch `tentativo_02`
+- [docs/tentativo_02.md](docs/tentativo_02.md): modifiche del branch `tentativo_02` (le librerie in `src/libraries/` descritte lì sono state rimosse da questo branch)

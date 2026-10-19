@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b2533"/>
+      <stop offset="1" stop-color="#0d131b"/>
+    </linearGradient>
+    <linearGradient id="bar" gradientUnits="userSpaceOnUse" x1="0" y1="295" x2="0" y2="125">
+      <stop offset="0" stop-color="#ff7a00"/>
+      <stop offset="1" stop-color="#ffd84a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Cassa -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+
+  <!-- Display OLED -->
+  <rect x="72" y="110" width="368" height="200" rx="18" fill="#05080c" stroke="#2c3a4c" stroke-width="4"/>
+
+  <!-- Indicatore connessione BT (come nel firmware) -->
+  <rect x="86" y="124" width="10" height="10" fill="#ffd84a"/>
+
+  <!-- Barre di spettro -->
+  <g fill="url(#bar)">
+    <rect x="81"  y="259" width="20" height="36"  rx="2"/>
+    <rect x="111" y="231" width="20" height="64"  rx="2"/>
+    <rect x="141" y="195" width="20" height="100" rx="2"/>
+    <rect x="171" y="159" width="20" height="136" rx="2"/>
+    <rect x="201" y="135" width="20" height="160" rx="2"/>
+    <rect x="231" y="147" width="20" height="148" rx="2"/>
+    <rect x="261" y="183" width="20" height="112" rx="2"/>
+    <rect x="291" y="211" width="20" height="84"  rx="2"/>
+    <rect x="321" y="191" width="20" height="104" rx="2"/>
+    <rect x="351" y="163" width="20" height="132" rx="2"/>
+    <rect x="381" y="199" width="20" height="96"  rx="2"/>
+    <rect x="411" y="239" width="20" height="56"  rx="2"/>
+  </g>
+
+  <!-- Picchi -->
+  <g fill="#ffeeb8">
+    <rect x="81"  y="247" width="20" height="5"/>
+    <rect x="111" y="219" width="20" height="5"/>
+    <rect x="141" y="183" width="20" height="5"/>
+    <rect x="171" y="147" width="20" height="5"/>
+    <rect x="201" y="123" width="20" height="5"/>
+    <rect x="231" y="135" width="20" height="5"/>
+    <rect x="261" y="171" width="20" height="5"/>
+    <rect x="291" y="199" width="20" height="5"/>
+    <rect x="321" y="179" width="20" height="5"/>
+    <rect x="351" y="151" width="20" height="5"/>
+    <rect x="381" y="187" width="20" height="5"/>
+    <rect x="411" y="227" width="20" height="5"/>
+  </g>
+
+  <!-- Nome -->
+  <text x="256" y="400" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="1">
+    <tspan fill="#ffffff">Wave</tspan><tspan fill="#ffb21f">Box</tspan>
+  </text>
+  <text x="256" y="442" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="600" letter-spacing="4" fill="#7d8ba0">BLUETOOTH SPECTRUM ANALYZER</text>
+</svg>
