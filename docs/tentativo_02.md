@@ -1,6 +1,6 @@
 # Branch `tentativo_02`
 
-Branch creato da `main` al commit `d4e5aab` ("Progetto WaveBox: firmware, librerie, README e .gitignore").
+Branch creato da `main` al commit `64e9432` ("Progetto WaveBox: firmware, librerie, README e .gitignore").
 
 ## Riepilogo
 
