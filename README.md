@@ -66,3 +66,15 @@ I parametri principali (numero di barre, range dB, modalità picchi `PEAK_MODE`,
 - [arduino-audiokit](https://github.com/pschatzmann/arduino-audiokit) e [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools)
 
 In `lib/` sono incluse copie locali di ESP32-A2DP, arduino-audiokit e arduino-audio-tools, che hanno la precedenza su quelle scaricate da `lib_deps`.
+
+### Librerie in `src/libraries/` (branch `tentativo_02`)
+
+- **kiss-fft**: FFT reale/complessa leggera in C
+- **kernel**: trasformata a Q costante (`cq_kernel`, di Kenny Peng) basata su kiss-fft, più i buffer `doubleBuffer` / `fftBuffer` (`buffer.h`)
+- **ssd-1322-gfx**: driver SSD1322 256x64 per Adafruit GFX (fork di venice1200 della libreria Adafruit SSD1327)
+
+Non sono ancora usate da `src/main.cpp`. Dettagli e stato in [docs/tentativo_02.md](docs/tentativo_02.md).
+
+## Documentazione
+
+- [docs/tentativo_02.md](docs/tentativo_02.md): modifiche del branch `tentativo_02`
