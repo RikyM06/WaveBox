@@ -4,6 +4,8 @@
 
 # WaveBox
 
+> **Attenzione: questa versione non funziona ancora.** Il firmware di questo branch non è stato compilato né provato sulla scheda. Dettagli in [docs/tentativo_03.md](docs/tentativo_03.md).
+
 Ricevitore audio Bluetooth basato su ESP32 con codec ES8388.
 
 L'ESP32 si presenta come cassa Bluetooth (A2DP sink), configura il codec ES8388 via I2C e gli invia l'audio via I2S.
