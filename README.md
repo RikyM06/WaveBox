@@ -4,7 +4,7 @@
 
 # WaveBox
 
-> **Attenzione: questa versione non funziona ancora.** Il firmware di questo branch non è stato compilato né provato sulla scheda e probabilmente richiede correzioni agli include. Dettagli in [docs/tentativo_04.md](docs/tentativo_04.md).
+> **Attenzione: questa versione non funziona ancora.** Il firmware di questo branch non è stato compilato né provato sulla scheda. Dettagli in [docs/tentativo_04.md](docs/tentativo_04.md).
 
 Ricevitore audio Bluetooth basato su ESP32 Audio Kit con codec ES8388.
 
@@ -55,6 +55,6 @@ Le tre librerie sono in `lib_deps` e vengono scaricate da git senza una versione
 
 ## Documentazione
 
-- [docs/tentativo_04.md](docs/tentativo_04.md): modifiche attuali del branch `tentativo_03` (AudioKitStream)
-- [docs/tentativo_03.md](docs/tentativo_03.md): primo `tentativo_03` (init manuale dell'ES8388), unito in `main` con la PR #2
+- [docs/tentativo_04.md](docs/tentativo_04.md): modifiche del branch `tentativo_04` (AudioKitStream)
+- [docs/tentativo_03.md](docs/tentativo_03.md): modifiche del branch `tentativo_03` (init manuale dell'ES8388), unito in `main` con la PR #2
 - [docs/tentativo_02.md](docs/tentativo_02.md): modifiche del branch `tentativo_02` (le librerie in `src/libraries/` descritte lì sono state rimosse in seguito)

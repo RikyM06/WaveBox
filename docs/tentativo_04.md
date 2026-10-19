@@ -1,6 +1,6 @@
-# Branch `tentativo_03`: uscita audio con AudioKitStream
+# Branch `tentativo_04`: uscita audio con AudioKitStream
 
-Branch creato da `main` al commit `d93a9f6` ("Create SECURITY.md for security policy"), dopo il merge della PR #2. Riprende il nome del `tentativo_03` precedente (descritto in [tentativo_03.md](tentativo_03.md)), ma è un lavoro nuovo.
+Branch creato da `main` al commit `d93a9f6` ("Create SECURITY.md for security policy"), dopo il merge della PR #2. All'inizio si chiamava `tentativo_03`, come il branch precedente descritto in [tentativo_03.md](tentativo_03.md). È stato rinominato in `tentativo_04` per non confondere i due lavori.
 
 ## Riepilogo
 
@@ -9,7 +9,9 @@ L'inizializzazione manuale del codec ES8388 via I2C è sostituita da `AudioKitSt
 Commit del branch:
 
 1. `848b851` tentativo_03: uscita audio tramite AudioKitStream
-2. documentazione: questo file e `README.md`
+2. `358323c` docs: tentativo_03 con AudioKitStream, README aggiornato
+3. `4a8dada` docs: pagina GitHub Pages e rinomina del doc in tentativo_04.md
+4. correzioni: include di `main.cpp`, partizione `huge_app.csv`, nome del branch nei documenti
 
 ## Modifiche a `src/main.cpp`
 
@@ -21,7 +23,7 @@ Rimosso:
 
 Aggiunto:
 
-- `#define USE_A2DP` e gli include `AudioTools.h` e `AudioKitHAL.h` al posto di `Arduino.h`, `Wire.h` e `BluetoothA2DPSink.h`
+- gli include `BluetoothA2DPSink.h`, `AudioTools.h` e `AudioTools/AudioLibs/AudioKit.h` al posto di `Arduino.h` e `Wire.h`
 - `AudioKitStream kit`, configurato con `defaultConfig(TX_MODE)` e volume iniziale 70
 - `read_data_stream()`: riceve il PCM dal sink e lo scrive su `kit`. È registrata con `set_stream_reader(read_data_stream, false)`, quindi il sink A2DP non usa la propria uscita I2S.
 - `AudioLogger` sulla seriale a livello `Info`
@@ -32,8 +34,17 @@ Il nome Bluetooth passa da `RIKY-ESP32-AUDIO` a **`ESP32_AUDIO_KIT`**. I pin di 
 ## Modifiche a `platformio.ini`
 
 - aggiunto `arduino-audiokit` (da git) a `lib_deps`, accanto a ESP32-A2DP e arduino-audio-tools
+- aggiunto `board_build.partitions = huge_app.csv`
 - tolto `-DCORE_DEBUG_LEVEL=1`
 - tolti i commenti iniziali del file generato da PlatformIO
+
+## Correzioni
+
+La prima versione del branch aveva questi problemi, corretti nel commit 4:
+
+- **Include.** `main.cpp` usava `#define USE_A2DP` con `AudioTools.h` e `AudioKitHAL.h`. Nella versione attuale di arduino-audio-tools (1.2.2), `AudioTools.h` non dichiara né `BluetoothA2DPSink` né `AudioKitStream` e `USE_A2DP` non ha effetto. Ora `main.cpp` include direttamente `BluetoothA2DPSink.h` e `AudioTools/AudioLibs/AudioKit.h`, che dichiara `AudioKitStream` e include a sua volta `AudioKitHAL.h`.
+- **Partizione.** La PR #2 aveva tolto `huge_app.csv`. Con stack Bluetooth, audio-tools e audiokit il firmware rischia di non entrare nella partizione app predefinita, quindi è stata rimessa.
+- **Nome del branch.** Documenti e README dicevano ancora `tentativo_03`.
 
 ## File rimossi
 
@@ -49,22 +60,16 @@ In `lib/` resta solo la copia locale di ESP32-A2DP (1.8.8).
 
 La storia di `main` è stata riscritta per attribuire a Riccardo Melis i due commit iniziali creati con un'altra identità git. Contenuto e date dei commit sono invariati, ma tutti gli SHA sono cambiati. I riferimenti in [tentativo_02.md](tentativo_02.md) e [tentativo_03.md](tentativo_03.md) sono stati aggiornati ai nuovi SHA (`d4e5aab` → `64e9432`, `91edecf` → `f82928d`).
 
+È stata aggiunta [index.html](index.html), la pagina per GitHub Pages (pubblicata da `main`, cartella `/docs`).
+
 ## Stato e problemi noti
 
-- **Non funziona ancora: non compilato né provato su hardware.** Su questo PC PlatformIO non è installato.
-- **Include probabilmente insufficienti.** Nella copia 1.2.2 di arduino-audio-tools, `AudioTools.h` non dichiara né `AudioKitStream` né `BluetoothA2DPSink`, e `USE_A2DP` non ha effetto. Se la build segnala tipi non definiti, aggiungere in cima a `main.cpp`:
-
-  ```cpp
-  #include "BluetoothA2DPSink.h"
-  #include "AudioTools/AudioLibs/AudioKit.h"
-  ```
-
+- **Non funziona ancora: non compilato né provato su hardware.** Su questo PC PlatformIO non è installato, quindi anche le correzioni sopra non sono verificate.
 - **Versioni non fissate.** arduino-audio-tools e arduino-audiokit vengono scaricate da git HEAD, mentre ESP32-A2DP è compilata dalla copia locale 1.8.8, che ha la precedenza. Le tre versioni potrebbero non essere compatibili tra loro.
 - **Scheda.** arduino-audiokit sceglie pin e codec con la macro `AUDIOKIT_BOARD`. `platformio.ini` non la imposta, quindi vale il default della libreria, che va verificato rispetto alla scheda usata.
-- **Partizione.** Come in [tentativo_03.md](tentativo_03.md), manca `board_build.partitions = huge_app.csv`. Con audio-tools e audiokit in più il firmware è ancora più grande.
 
 ## Prossimi passi
 
-1. Compilare con `pio run` e correggere gli include se necessario.
+1. Compilare con `pio run` e provare l'audio sulla scheda.
 2. Fissare le versioni delle librerie in `lib_deps` (tag o commit).
-3. Verificare `AUDIOKIT_BOARD` e provare l'audio sulla scheda.
+3. Verificare `AUDIOKIT_BOARD` rispetto alla scheda.
