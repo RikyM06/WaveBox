@@ -62,4 +62,5 @@ In `lib/` è inclusa una copia locale di ESP32-A2DP (1.8.8), che ha la precedenz
 
 ## Documentazione
 
+- [docs/tentativo_03.md](docs/tentativo_03.md): modifiche del branch `tentativo_03`
 - [docs/tentativo_02.md](docs/tentativo_02.md): modifiche del branch `tentativo_02` (le librerie in `src/libraries/` descritte lì sono state rimosse da questo branch)
