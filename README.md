@@ -58,3 +58,7 @@ Le tre librerie sono in `lib_deps` e vengono scaricate da git senza una versione
 - [docs/tentativo_04.md](docs/tentativo_04.md): modifiche del branch `tentativo_04` (AudioKitStream)
 - [docs/tentativo_03.md](docs/tentativo_03.md): modifiche del branch `tentativo_03` (init manuale dell'ES8388), unito in `main` con la PR #2
 - [docs/tentativo_02.md](docs/tentativo_02.md): modifiche del branch `tentativo_02` (le librerie in `src/libraries/` descritte lì sono state rimosse in seguito)
+
+## Autore
+
+Riccardo Melis: [LinkedIn](https://www.linkedin.com/in/rikym06/) · [GitHub](https://github.com/RikyM06)
