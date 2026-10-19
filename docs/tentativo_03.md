@@ -1,6 +1,6 @@
 # Branch `tentativo_03`
 
-Branch creato da `main` al commit `91edecf` (merge di `tentativo_02`).
+Branch creato da `main` al commit `f82928d` (merge di `tentativo_02`).
 
 ## Riepilogo
 
