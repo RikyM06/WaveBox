@@ -7,7 +7,7 @@
 -->
 <html lang="it">
 	<head>
-		<title>WaveBox â€“ Ricevitore audio Bluetooth con ESP32</title>
+		<title>WaveBox – Ricevitore audio Bluetooth con ESP32</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content="WaveBox: ricevitore audio Bluetooth basato su ESP32, con ingresso AUX e visualizzazione del segnale in tempo reale su display OLED. Ideato e sviluppato da Riccardo Melis." />
@@ -49,13 +49,13 @@
 								<div class="spotlight">
 									<div class="content">
 										<header class="major">
-											<h2>Cos'Ã¨ WaveBox</h2>
+											<h2>Cos'è WaveBox</h2>
 										</header>
-										<p>WaveBox Ã¨ un ricevitore audio Bluetooth basato su ESP32. Si collega allo smartphone,
+										<p>WaveBox è un ricevitore audio Bluetooth basato su ESP32. Si collega allo smartphone,
 										riproduce la musica su casse collegate al jack da 3,5 mm e mostra il segnale in tempo
 										reale su un display OLED.</p>
-										<p>Il progetto Ã¨ nato su una scheda ESP32-A1S Audio Kit con codec integrato ed Ã¨ poi
-										passato a una soluzione modulare, con ADC e DAC separati, per avere piÃ¹ controllo
+										<p>Il progetto è nato su una scheda ESP32-A1S Audio Kit con codec integrato ed è poi
+										passato a una soluzione modulare, con ADC e DAC separati, per avere più controllo
 										su ingresso e uscita.</p>
 										<ul class="actions">
 											<li><a href="#hardware" class="button scrolly">Scopri l'hardware</a></li>
@@ -73,7 +73,7 @@
 								<ul class="features">
 									<li>
 										<span class="icon brands major style1 fa-bluetooth-b"></span>
-										<h3>Bluetooth â†’ casse</h3>
+										<h3>Bluetooth → casse</h3>
 										<p>Lo smartphone si collega via Bluetooth (A2DP) e l'audio esce sul jack da 3,5 mm,
 										verso casse amplificate o un ingresso AUX.</p>
 									</li>
@@ -86,7 +86,7 @@
 									<li>
 										<span class="icon solid major style5 fa-wave-square"></span>
 										<h3>Segnale in tempo reale</h3>
-										<p>Il display OLED 256Ã—64 mostra il segnale audio (VU meter, forma d'onda, spettro)
+										<p>Il display OLED 256×64 mostra il segnale audio (VU meter, forma d'onda, spettro)
 										e lo stato del dispositivo: connessione Bluetooth e sorgente attiva.</p>
 									</li>
 								</ul>
@@ -96,7 +96,7 @@
 							<section id="hardware" class="main">
 								<header class="major">
 									<h2>Hardware</h2>
-									<p>Moduli separati e facili da trovare, collegati all'ESP32 tramite IÂ²S e SPI.</p>
+									<p>Moduli separati e facili da trovare, collegati all'ESP32 tramite I²S e SPI.</p>
 								</header>
 								<span class="image fit"><img src="images/schema-a-blocchi.svg" alt="Schema a blocchi: smartphone e sorgente AUX entrano nell'ESP32, che pilota il DAC PCM5102A verso il jack e il display OLED SSD1322" /></span>
 								<div class="table-wrapper">
@@ -112,17 +112,17 @@
 											<tr>
 												<td>ESP32-WROOM-32 Dev Board</td>
 												<td>Microcontrollore, Bluetooth Classic A2DP</td>
-												<td>â€”</td>
+												<td>—</td>
 											</tr>
 											<tr>
 												<td>PCM1808</td>
 												<td>ADC stereo 24 bit (ingresso AUX)</td>
-												<td>IÂ²S</td>
+												<td>I²S</td>
 											</tr>
 											<tr>
 												<td>PCM5102A (GY-PCM5102)</td>
 												<td>DAC stereo 32 bit (uscita)</td>
-												<td>IÂ²S</td>
+												<td>I²S</td>
 											</tr>
 											<tr>
 												<td>Jack TRRS 3,5 mm</td>
@@ -130,14 +130,14 @@
 												<td>analogica</td>
 											</tr>
 											<tr>
-												<td>OLED 3,12" 256Ã—64 (SSD1322)</td>
+												<td>OLED 3,12" 256×64 (SSD1322)</td>
 												<td>Stato e visualizzazione del segnale</td>
 												<td>SPI 4 fili</td>
 											</tr>
 										</tbody>
 									</table>
 								</div>
-								<p>L'uscita del PCM5102A Ã¨ di <strong>linea</strong>: servono casse <strong>amplificate</strong>.
+								<p>L'uscita del PCM5102A è di <strong>linea</strong>: servono casse <strong>amplificate</strong>.
 								Per casse passive va aggiunto un amplificatore (per esempio PAM8403 o TPA3116).</p>
 								<h3>Firmware</h3>
 								<p>Scritto in C/C++ con il framework Arduino per ESP32 e compilato con PlatformIO.
@@ -165,7 +165,7 @@
 									<p>Sorgenti e documentazione sono su GitHub,<br />
 									con l'obiettivo di poter costruire una seconda copia identica del dispositivo.</p>
 								</header>
-								<p>Il codice Ã¨ distribuito con licenza <a href="https://opensource.org/license/mit">MIT</a>;
+								<p>Il codice è distribuito con licenza <a href="https://opensource.org/license/mit">MIT</a>;
 								documentazione, foto e schemi con licenza <a href="https://creativecommons.org/licenses/by/4.0/deed.it">CC BY 4.0</a>.</p>
 								<footer class="major">
 									<ul class="actions special">
@@ -181,9 +181,9 @@
 					<footer id="footer">
 						<section>
 							<h2>L'autore</h2>
-							<p>WaveBox Ã¨ ideato e sviluppato da Riccardo Melis.</p>
+							<p>WaveBox è ideato e sviluppato da Riccardo Melis.</p>
 							<ul class="actions">
-								<li><a href="riccardo.html" class="button">Chi Ã¨ Riccardo</a></li>
+								<li><a href="riccardo.html" class="button">Chi è Riccardo</a></li>
 								<li><a href="https://www.linkedin.com/in/rikym06" class="button">Profilo LinkedIn</a></li>
 							</ul>
 						</section>
@@ -195,7 +195,7 @@
 								<dt>Audio</dt>
 								<dd>Bluetooth A2DP &bull; ADC PCM1808 &bull; DAC PCM5102A</dd>
 								<dt>Display</dt>
-								<dd>OLED SSD1322 3,12" 256Ã—64</dd>
+								<dd>OLED SSD1322 3,12" 256×64</dd>
 								<dt>Firmware</dt>
 								<dd>C/C++ &bull; Arduino &bull; PlatformIO</dd>
 							</dl>
