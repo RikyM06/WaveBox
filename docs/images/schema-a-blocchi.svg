@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="1100" height="380" viewBox="0 0 1100 380"
+	font-family="'Source Sans Pro', Helvetica, Arial, sans-serif" font-size="18" fill="#636363">
+	<defs>
+		<marker id="freccia" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+			<path d="M0,0 L10,5 L0,10 z" fill="#8a8a8a"/>
+		</marker>
+	</defs>
+
+	<!-- Collegamenti -->
+	<g stroke="#8a8a8a" stroke-width="2" fill="none" marker-end="url(#freccia)">
+		<line x1="180" y1="100" x2="436" y2="100" stroke-dasharray="8 6"/>
+		<line x1="180" y1="290" x2="236" y2="290"/>
+		<line x1="380" y1="290" x2="436" y2="290"/>
+		<line x1="620" y1="100" x2="686" y2="100"/>
+		<line x1="620" y1="290" x2="686" y2="290"/>
+		<line x1="850" y1="100" x2="896" y2="100"/>
+		<line x1="990" y1="130" x2="990" y2="166"/>
+	</g>
+
+	<!-- Etichette dei collegamenti -->
+	<g font-size="14" text-anchor="middle" fill="#8a8a8a">
+		<text x="308" y="88">Bluetooth A2DP</text>
+		<text x="408" y="278">I²S</text>
+		<text x="653" y="88">I²S</text>
+		<text x="653" y="278">SPI</text>
+		<text x="873" y="88">linea</text>
+	</g>
+
+	<!-- Blocchi -->
+	<g stroke-width="2" fill="#ffffff">
+		<rect x="20" y="70" width="160" height="60" rx="8" stroke="#efa8b0"/>
+		<rect x="20" y="260" width="160" height="60" rx="8" stroke="#efa8b0"/>
+		<rect x="240" y="255" width="140" height="70" rx="8" stroke="#efa8b0"/>
+		<rect x="440" y="50" width="180" height="280" rx="8" stroke="#c79cc8" stroke-width="3"/>
+		<rect x="690" y="65" width="160" height="70" rx="8" stroke="#8cc9f0"/>
+		<rect x="900" y="70" width="180" height="60" rx="8" stroke="#8cc9f0"/>
+		<rect x="900" y="170" width="180" height="60" rx="8" stroke="#8cc9f0"/>
+		<rect x="690" y="250" width="160" height="80" rx="8" stroke="#9bb2e1"/>
+	</g>
+
+	<!-- Testi dei blocchi -->
+	<g text-anchor="middle">
+		<text x="100" y="106">Smartphone</text>
+		<text x="100" y="296">Sorgente AUX</text>
+		<text x="310" y="286">PCM1808</text>
+		<text x="310" y="310" font-size="14">ADC</text>
+		<text x="530" y="184" font-size="20" font-weight="bold">ESP32</text>
+		<text x="530" y="208" font-size="14">WROOM-32</text>
+		<text x="770" y="96">PCM5102A</text>
+		<text x="770" y="120" font-size="14">DAC</text>
+		<text x="990" y="96">Jack 3,5 mm</text>
+		<text x="990" y="116" font-size="14">TRRS</text>
+		<text x="990" y="206">Casse amplificate</text>
+		<text x="770" y="284">OLED SSD1322</text>
+		<text x="770" y="308" font-size="14">3,12" 256×64</text>
+	</g>
+	<!-- Data ultimo aggiornamento: 17/10/2026 17:07 -->
+</svg>

@@ -1,257 +1,209 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
+<!--
+	WaveBox - sito del progetto (bozza)
+	Basato su Stellar by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <html lang="it">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WaveBox: ricevitore audio Bluetooth per ESP32</title>
-  <meta name="description" content="WaveBox: firmware ESP32 che riceve audio via Bluetooth A2DP e lo riproduce sul codec ES8388 dell'ESP32 Audio Kit.">
-  <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <style>
-    :root {
-      --bg: #0d131b;
-      --bg-card: #151e2a;
-      --border: #2c3a4c;
-      --text: #e6ebf2;
-      --muted: #7d8ba0;
-      --accent: #ffb21f;
-      --accent-strong: #ff7a00;
-      --warn-bg: #3a2a0c;
-      --warn-border: #a86a00;
-      --code-bg: #05080c;
-    }
+	<head>
+		<title>WaveBox – Ricevitore audio Bluetooth con ESP32</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="WaveBox: ricevitore audio Bluetooth basato su ESP32, con ingresso AUX e visualizzazione del segnale in tempo reale su display OLED. Ideato e sviluppato da Riccardo Melis." />
+		<meta name="author" content="Riccardo Melis" />
+		<link rel="icon" type="image/svg+xml" href="images/logo.svg" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
 
-    * { box-sizing: border-box; }
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-    body {
-      margin: 0;
-      background: linear-gradient(180deg, #1b2533 0, var(--bg) 480px);
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-    }
+				<!-- Header -->
+					<header id="header" class="alt">
+						<span class="logo"><img src="images/logo.svg" alt="Logo WaveBox" /></span>
+						<h1>WaveBox</h1>
+						<p>Ricevitore audio Bluetooth con visualizzazione del segnale in tempo reale,<br />
+						ideato e sviluppato da <a href="riccardo.html">Riccardo Melis</a>.</p>
+					</header>
 
-    a { color: var(--accent); }
-    a:hover { color: var(--accent-strong); }
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="#intro" class="active">Il progetto</a></li>
+							<li><a href="#funzioni">Funzioni</a></li>
+							<li><a href="#hardware">Hardware</a></li>
+							<li><a href="#open-source">Open source</a></li>
+							<li><a href="riccardo.html">L'autore</a></li>
+						</ul>
+					</nav>
 
-    .wrap {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
+				<!-- Main -->
+					<div id="main">
 
-    header {
-      text-align: center;
-      padding: 56px 0 32px;
-    }
+						<!-- Il progetto -->
+							<section id="intro" class="main">
+								<div class="spotlight">
+									<div class="content">
+										<header class="major">
+											<h2>Cos'è WaveBox</h2>
+										</header>
+										<p>WaveBox è un ricevitore audio Bluetooth basato su ESP32. Si collega allo smartphone,
+										riproduce la musica su casse collegate al jack da 3,5 mm e mostra il segnale in tempo
+										reale su un display OLED.</p>
+										<p>Il progetto è nato su una scheda ESP32-A1S Audio Kit con codec integrato ed è poi
+										passato a una soluzione modulare, con ADC e DAC separati, per avere più controllo
+										su ingresso e uscita.</p>
+										<ul class="actions">
+											<li><a href="#hardware" class="button scrolly">Scopri l'hardware</a></li>
+										</ul>
+									</div>
+									<span class="image"><img src="images/wavebox.svg" alt="Barre di un segnale audio" /></span>
+								</div>
+							</section>
 
-    header img {
-      width: 180px;
-      height: 180px;
-    }
+						<!-- Funzioni -->
+							<section id="funzioni" class="main special">
+								<header class="major">
+									<h2>Cosa fa</h2>
+								</header>
+								<ul class="features">
+									<li>
+										<span class="icon brands major style1 fa-bluetooth-b"></span>
+										<h3>Bluetooth → casse</h3>
+										<p>Lo smartphone si collega via Bluetooth (A2DP) e l'audio esce sul jack da 3,5 mm,
+										verso casse amplificate o un ingresso AUX.</p>
+									</li>
+									<li>
+										<span class="icon solid major style3 fa-plug"></span>
+										<h3>Ingresso AUX</h3>
+										<p>Una sorgente analogica (lettore, PC, strumento) entra dal convertitore PCM1808
+										e viene inoltrata all'uscita.</p>
+									</li>
+									<li>
+										<span class="icon solid major style5 fa-wave-square"></span>
+										<h3>Segnale in tempo reale</h3>
+										<p>Il display OLED 256×64 mostra il segnale audio (VU meter, forma d'onda, spettro)
+										e lo stato del dispositivo: connessione Bluetooth e sorgente attiva.</p>
+									</li>
+								</ul>
+							</section>
 
-    header h1 {
-      margin: 16px 0 4px;
-      font-size: 2.6rem;
-      letter-spacing: 1px;
-    }
+						<!-- Hardware -->
+							<section id="hardware" class="main">
+								<header class="major">
+									<h2>Hardware</h2>
+									<p>Moduli separati e facili da trovare, collegati all'ESP32 tramite I²S e SPI.</p>
+								</header>
+								<span class="image fit"><img src="images/schema-a-blocchi.svg" alt="Schema a blocchi: smartphone e sorgente AUX entrano nell'ESP32, che pilota il DAC PCM5102A verso il jack e il display OLED SSD1322" /></span>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr>
+												<th>Componente</th>
+												<th>Ruolo</th>
+												<th>Interfaccia</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>ESP32-WROOM-32 Dev Board</td>
+												<td>Microcontrollore, Bluetooth Classic A2DP</td>
+												<td>—</td>
+											</tr>
+											<tr>
+												<td>PCM1808</td>
+												<td>ADC stereo 24 bit (ingresso AUX)</td>
+												<td>I²S</td>
+											</tr>
+											<tr>
+												<td>PCM5102A (GY-PCM5102)</td>
+												<td>DAC stereo 32 bit (uscita)</td>
+												<td>I²S</td>
+											</tr>
+											<tr>
+												<td>Jack TRRS 3,5 mm</td>
+												<td>Connettore di uscita verso le casse</td>
+												<td>analogica</td>
+											</tr>
+											<tr>
+												<td>OLED 3,12" 256×64 (SSD1322)</td>
+												<td>Stato e visualizzazione del segnale</td>
+												<td>SPI 4 fili</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<p>L'uscita del PCM5102A è di <strong>linea</strong>: servono casse <strong>amplificate</strong>.
+								Per casse passive va aggiunto un amplificatore (per esempio PAM8403 o TPA3116).</p>
+								<h3>Firmware</h3>
+								<p>Scritto in C/C++ con il framework Arduino per ESP32 e compilato con PlatformIO.
+								Usa le librerie <a href="https://github.com/pschatzmann/ESP32-A2DP">ESP32-A2DP</a> per il
+								Bluetooth e <a href="https://github.com/olikraus/u8g2">U8g2</a> per il display.</p>
+							</section>
 
-    header h1 span { color: var(--accent); }
+						<!-- Open source -->
+							<section id="open-source" class="main special">
+								<header class="major">
+									<h2>Open source e replicabile</h2>
+									<p>Sorgenti e documentazione sono su GitHub,<br />
+									con l'obiettivo di poter costruire una seconda copia identica del dispositivo.</p>
+								</header>
+								<p>Il codice è distribuito con licenza <a href="https://opensource.org/license/mit">MIT</a>;
+								documentazione, foto e schemi con licenza <a href="https://creativecommons.org/licenses/by/4.0/deed.it">CC BY 4.0</a>.</p>
+								<footer class="major">
+									<ul class="actions special">
+										<li><a href="https://github.com/RikyM06/WaveBox" class="button primary">Sorgenti su GitHub</a></li>
+										<li><a href="https://www.linkedin.com/in/rikym06" class="button">Contatta l'autore</a></li>
+									</ul>
+								</footer>
+							</section>
 
-    .tagline {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1.1rem;
-    }
+					</div>
 
-    .actions {
-      margin-top: 24px;
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+				<!-- Footer -->
+					<footer id="footer">
+						<section>
+							<h2>L'autore</h2>
+							<p>WaveBox è ideato e sviluppato da Riccardo Melis.</p>
+							<ul class="actions">
+								<li><a href="riccardo.html" class="button">Chi è Riccardo</a></li>
+								<li><a href="https://www.linkedin.com/in/rikym06" class="button">Profilo LinkedIn</a></li>
+							</ul>
+						</section>
+						<section>
+							<h2>In breve</h2>
+							<dl class="alt">
+								<dt>MCU</dt>
+								<dd>ESP32-WROOM-32</dd>
+								<dt>Audio</dt>
+								<dd>Bluetooth A2DP &bull; ADC PCM1808 &bull; DAC PCM5102A</dd>
+								<dt>Display</dt>
+								<dd>OLED SSD1322 3,12" 256×64</dd>
+								<dt>Firmware</dt>
+								<dd>C/C++ &bull; Arduino &bull; PlatformIO</dd>
+							</dl>
+							<ul class="icons">
+								<li><a href="https://www.linkedin.com/in/rikym06" class="icon brands fa-linkedin-in alt"><span class="label">LinkedIn</span></a></li>
+								<li><a href="https://github.com/RikyM06/WaveBox" class="icon brands fa-github alt"><span class="label">GitHub</span></a></li>
+							</ul>
+						</section>
+						<p class="copyright">&copy; 2026 Riccardo Melis. Codice MIT, contenuti CC BY 4.0. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+					</footer>
 
-    .btn {
-      display: inline-block;
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 600;
-    }
+			</div>
 
-    .btn.primary {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #1b1200;
-    }
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
 
-    .btn:hover { border-color: var(--accent); color: var(--text); }
-    .btn.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); color: #1b1200; }
-
-    .warning {
-      background: var(--warn-bg);
-      border: 1px solid var(--warn-border);
-      border-radius: 10px;
-      padding: 14px 18px;
-      margin: 0 0 32px;
-    }
-
-    .warning strong { color: var(--accent); }
-
-    section {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 8px 24px 16px;
-      margin-bottom: 20px;
-    }
-
-    h2 {
-      font-size: 1.3rem;
-      color: var(--accent);
-      margin: 16px 0 8px;
-    }
-
-    ul { padding-left: 1.2em; }
-    li { margin: 4px 0; }
-
-    code {
-      font-family: Consolas, "Courier New", monospace;
-      font-size: 0.92em;
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1px 5px;
-    }
-
-    pre {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-      overflow-x: auto;
-    }
-
-    pre code {
-      background: none;
-      border: 0;
-      padding: 0;
-    }
-
-    .comment { color: var(--muted); }
-
-    ol { padding-left: 1.4em; }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.9rem;
-      padding: 24px 0 48px;
-    }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header>
-      <img src="logo.svg" alt="Logo WaveBox">
-      <h1>Wave<span>Box</span></h1>
-      <p class="tagline">Ricevitore audio Bluetooth per ESP32 Audio Kit con codec ES8388</p>
-      <div class="actions">
-        <a class="btn primary" href="https://github.com/RikyM06/WaveBox">Codice su GitHub</a>
-        <a class="btn" href="https://github.com/RikyM06/WaveBox/blob/main/docs/tentativo_04.md">Stato del progetto</a>
-        <a class="btn" href="https://www.linkedin.com/in/rikym06/">LinkedIn di Riccardo</a>
-      </div>
-    </header>
-
-    <main>
-      <div class="warning">
-        <strong>Attenzione: questa versione non funziona ancora.</strong>
-        Il firmware non è stato compilato né provato sulla scheda.
-        Dettagli in <a href="https://github.com/RikyM06/WaveBox/blob/main/docs/tentativo_04.md">tentativo_04.md</a>.
-      </div>
-
-      <section>
-        <h2>Cos'è</h2>
-        <p>
-          WaveBox è un firmware per ESP32 che si presenta come cassa Bluetooth (A2DP sink).
-          Il flusso audio ricevuto passa ad <code>AudioKitStream</code> (arduino-audio-tools + arduino-audiokit),
-          che configura il codec ES8388 e l'I2S della scheda.
-        </p>
-        <p>
-          L'analizzatore di spettro su display OLED SSD1322 delle versioni precedenti non è presente nella versione attuale.
-        </p>
-      </section>
-
-      <section>
-        <h2>Funzionalità</h2>
-        <ul>
-          <li>Ricezione audio Bluetooth A2DP, nome dispositivo <code>ESP32_AUDIO_KIT</code></li>
-          <li>Uscita audio sul codec ES8388 tramite <code>AudioKitStream</code>, volume iniziale 70</li>
-          <li>Gestione dei tasti della scheda tramite <code>kit.processActions()</code></li>
-          <li>Log di arduino-audio-tools sulla seriale</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Hardware</h2>
-        <ul>
-          <li>Scheda ESP32 Audio Kit (A1S) con codec ES8388 (<code>esp32dev</code> in PlatformIO)</li>
-        </ul>
-        <p>
-          I pin di I2S e I2C non sono definiti nel firmware: li sceglie arduino-audiokit in base alla scheda
-          configurata con la macro <code>AUDIOKIT_BOARD</code>.
-        </p>
-      </section>
-
-      <section>
-        <h2>Compilazione e caricamento</h2>
-        <p>Il progetto usa <a href="https://platformio.org/">PlatformIO</a> (framework Arduino).</p>
-<pre><code>pio run                      <span class="comment"># compila</span>
-pio run -t upload            <span class="comment"># carica sulla scheda</span>
-pio device monitor           <span class="comment"># monitor seriale (115200 baud)</span></code></pre>
-        <p>
-          Dopo l'avvio, abbinare il telefono o il PC al dispositivo Bluetooth <code>ESP32_AUDIO_KIT</code>
-          e avviare la riproduzione.
-        </p>
-      </section>
-
-      <section>
-        <h2>Architettura</h2>
-        <p>Tutto il codice applicativo è in <code>src/main.cpp</code>:</p>
-        <ol>
-          <li><strong>AudioKit</strong>: <code>AudioKitStream</code> viene configurato in <code>TX_MODE</code> e inizializza codec e I2S.</li>
-          <li><strong>Bluetooth A2DP</strong>: <code>BluetoothA2DPSink</code> riceve il flusso PCM e lo passa alla callback <code>read_data_stream()</code>, che lo scrive su <code>AudioKitStream</code>.</li>
-          <li><strong><code>loop()</code></strong>: chiama <code>kit.processActions()</code>.</li>
-        </ol>
-      </section>
-
-      <section>
-        <h2>Librerie</h2>
-        <ul>
-          <li><a href="https://github.com/pschatzmann/ESP32-A2DP">ESP32-A2DP</a>: Bluetooth audio</li>
-          <li><a href="https://github.com/pschatzmann/arduino-audio-tools">arduino-audio-tools</a>: <code>AudioKitStream</code> e logging</li>
-          <li><a href="https://github.com/pschatzmann/arduino-audiokit">arduino-audiokit</a>: driver del codec e pin della scheda</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Documentazione</h2>
-        <ul>
-          <li><a href="https://github.com/RikyM06/WaveBox/blob/main/docs/tentativo_04.md">tentativo_04.md</a>: versione attuale con AudioKitStream</li>
-          <li><a href="https://github.com/RikyM06/WaveBox/blob/main/docs/tentativo_03.md">tentativo_03.md</a>: primo tentativo con init manuale dell'ES8388</li>
-          <li><a href="https://github.com/RikyM06/WaveBox/blob/main/docs/tentativo_02.md">tentativo_02.md</a>: librerie kiss-fft, CQT e driver SSD1322</li>
-        </ul>
-      </section>
-    </main>
-
-    <footer>
-      WaveBox &middot; Riccardo Melis &middot;
-      <a href="https://www.linkedin.com/in/rikym06/">LinkedIn</a> &middot;
-      <a href="https://github.com/RikyM06/WaveBox">github.com/RikyM06/WaveBox</a>
-    </footer>
-  </div>
-</body>
+	</body>
 </html>
+<!-- Data ultimo aggiornamento: 18/10/2026 15:31 -->

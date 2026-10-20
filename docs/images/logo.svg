@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="85px" height="85px" viewBox="0 0 80 80">
+	<circle cx="40" cy="40" r="40" fill="#FFFFFF"/>
+	<path fill="none" stroke="#8cc9f0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
+		d="M16,40 C20,40 21,30 24,30 S28,50 31,50 S35,20 39,20 S44,60 48,60 S52,28 55,28 S59,40 64,40"/>
+	<!-- Data ultimo aggiornamento: 17/10/2026 17:07 -->
+</svg>
