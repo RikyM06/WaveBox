@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <!--
 	WaveBox - sito del progetto (bozza)
 	Basato su Stellar by HTML5 UP
@@ -149,13 +149,13 @@
 							<section id="stato" class="main special">
 								<header class="major">
 									<h2>Stato del progetto</h2>
-									<p>Lavori in corso: la versione attuale <strong>non funziona ancora</strong>.</p>
+									<p>Lavori in corso: la versione attuale <strong>funziona, ma i test devono ancora essere terminati</strong>.</p>
 								</header>
-								<p>Nel branch <code>tentativo_06</code> il firmware (invariato rispetto a <code>tentativo_05</code>) Ã¨ un passthrough IÂ²S: legge l'audio dall'ADC PCM1808,
-								lo amplifica con un guadagno fisso e lo manda al DAC PCM5102A. Bluetooth e display non sono
-								ancora stati reintegrati, e il codice non Ã¨ stato compilato nÃ© provato sulla scheda.</p>
-								<p>Il prossimo passo Ã¨ provare il passthrough sull'hardware e riportarvi sopra Bluetooth A2DP e spettro su OLED.
-								<a href="https://github.com/RikyM06/WaveBox/blob/tentativo_06/docs/tentativo_06.md">Dettagli delle modifiche</a>.</p>
+								<p>Nel branch <code>tentativo_07</code> il firmware è un test dell'ADC PCM1808: legge l'audio via I²S
+								e mostra sulla seriale il livello di ogni canale in dBFS. Passthrough sul DAC PCM5102A, Bluetooth e display
+								non sono presenti in questa versione.</p>
+								<p>Il prossimo passo è terminare i test e riportare uscita audio, Bluetooth A2DP e spettro su OLED.
+								<a href="https://github.com/RikyM06/WaveBox/blob/tentativo_07/docs/tentativo_07.md">Dettagli delle modifiche</a>.</p>
 							</section>
 
 						<!-- Open source -->
