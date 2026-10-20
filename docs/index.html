@@ -35,6 +35,7 @@
 							<li><a href="#intro" class="active">Il progetto</a></li>
 							<li><a href="#funzioni">Funzioni</a></li>
 							<li><a href="#hardware">Hardware</a></li>
+							<li><a href="#stato">Stato</a></li>
 							<li><a href="#open-source">Open source</a></li>
 							<li><a href="riccardo.html">L'autore</a></li>
 						</ul>
@@ -144,6 +145,19 @@
 								Bluetooth e <a href="https://github.com/olikraus/u8g2">U8g2</a> per il display.</p>
 							</section>
 
+						<!-- Stato -->
+							<section id="stato" class="main special">
+								<header class="major">
+									<h2>Stato del progetto</h2>
+									<p>Lavori in corso: la versione attuale <strong>non funziona ancora</strong>.</p>
+								</header>
+								<p>Nel branch <code>tentativo_05</code> il firmware è un passthrough I²S: legge l'audio dall'ADC PCM1808,
+								lo amplifica con un guadagno fisso e lo manda al DAC PCM5102A. Bluetooth e display non sono
+								ancora stati reintegrati, e il codice non è stato compilato né provato sulla scheda.</p>
+								<p>Il prossimo passo è provare il passthrough sull'hardware e riportarvi sopra Bluetooth A2DP e spettro su OLED.
+								<a href="https://github.com/RikyM06/WaveBox/blob/tentativo_05/docs/tentativo_05.md">Dettagli delle modifiche</a>.</p>
+							</section>
+
 						<!-- Open source -->
 							<section id="open-source" class="main special">
 								<header class="major">
@@ -206,4 +220,4 @@
 
 	</body>
 </html>
-<!-- Data ultimo aggiornamento: 18/10/2026 15:31 -->
+<!-- Data ultimo aggiornamento: 20/10/2026 -->
