@@ -153,3 +153,32 @@ void setup() {
 void loop() {
   delay(1000);
 }
+/*
+PCM5102A
+
+ESP32
+
+VIN
+
+5V
+
+GND
+
+GND
+
+BCK
+
+GPIO 26
+
+LRCK
+
+GPIO 33
+
+DIN
+
+GPIO 21
+
+SCK
+
+Non collegato
+*/
