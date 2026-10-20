@@ -4,26 +4,24 @@
 
 # WaveBox
 
-> **Attenzione: questa versione non funziona ancora.** Il firmware di questo branch non è stato compilato né provato sulla scheda. Dettagli in [docs/tentativo_04.md](docs/tentativo_04.md).
+> **Attenzione: questa versione non funziona ancora.** Il firmware di questo branch non è stato compilato né provato sulla scheda. Dettagli in [docs/tentativo_05.md](docs/tentativo_05.md).
 
-Ricevitore audio Bluetooth basato su ESP32 Audio Kit con codec ES8388.
+Passthrough audio su ESP32 con ADC PCM1808 in ingresso e DAC PCM5102A in uscita.
 
-L'ESP32 si presenta come cassa Bluetooth (A2DP sink) e passa il flusso audio ad `AudioKitStream` (arduino-audio-tools + arduino-audiokit), che configura il codec ES8388 e l'I2S della scheda.
-
-L'analizzatore di spettro su display OLED SSD1322 delle versioni precedenti non è presente in questo branch.
+Il firmware legge l'audio dal PCM1808 via I2S, lo amplifica con un guadagno fisso (`GAIN = 128`) e lo manda al PCM5102A. Bluetooth A2DP e analizzatore di spettro su OLED delle versioni precedenti non sono presenti in questo branch.
 
 ## Funzionalità
 
-- Ricezione audio Bluetooth A2DP, nome dispositivo **`ESP32_AUDIO_KIT`**
-- Uscita audio sul codec ES8388 tramite `AudioKitStream`, volume iniziale 70
-- Gestione dei tasti della scheda tramite `kit.processActions()`
-- Log di arduino-audio-tools sulla seriale
+- Ingresso I2S dal PCM1808 (`I2S_NUM_1`, slave) e uscita I2S verso il PCM5102A (`I2S_NUM_0`, master), 44,1 kHz a 32 bit
+- Guadagno digitale fisso con saturazione
+- Livello di picco dell'ingresso stampato sulla seriale ogni 500 ms
 
 ## Hardware
 
-- Scheda ESP32 Audio Kit (A1S) con codec ES8388 (`esp32dev` in PlatformIO)
-
-I pin di I2S e I2C non sono definiti in `src/main.cpp`: li sceglie arduino-audiokit in base alla scheda configurata con la macro `AUDIOKIT_BOARD`.
+- ESP32 DevKit (`esp32dev` in PlatformIO)
+- ADC PCM1808 (dato su GPIO 34)
+- DAC PCM5102A (DIN su GPIO 21)
+- Linee condivise: BCK GPIO 26, LRCK GPIO 33, MCLK GPIO 0
 
 ## Compilazione e caricamento
 
@@ -35,26 +33,21 @@ pio run -t upload            # carica sulla scheda
 pio device monitor           # monitor seriale (115200 baud)
 ```
 
-Dopo l'avvio, abbinare il telefono o il PC al dispositivo Bluetooth `ESP32_AUDIO_KIT` e avviare la riproduzione.
-
 ## Architettura
 
-Tutto il codice applicativo è in `src/main.cpp`:
+Tutto il codice applicativo è in `src/main.cpp`, con il driver `driver/i2s.h` di ESP-IDF:
 
-1. **AudioKit**: `AudioKitStream` viene configurato in `TX_MODE` e inizializza codec e I2S.
-2. **Bluetooth A2DP**: `BluetoothA2DPSink` riceve il flusso PCM e lo passa alla callback `read_data_stream()`, che lo scrive su `AudioKitStream`. Il sink non usa la propria uscita I2S.
-3. **`loop()`**: chiama `kit.processActions()`.
+1. **`setup_i2s_output()`** e **`setup_i2s_input()`**: configurano le due porte I2S.
+2. **`audio_task`** (core 1): legge dal PCM1808, applica il guadagno e scrive sul PCM5102A.
+3. **`loop()`**: vuoto (`delay(1000)`).
 
 ## Librerie
 
-- [ESP32-A2DP](https://github.com/pschatzmann/ESP32-A2DP): Bluetooth audio
-- [arduino-audio-tools](https://github.com/pschatzmann/arduino-audio-tools): `AudioKitStream` e logging
-- [arduino-audiokit](https://github.com/pschatzmann/arduino-audiokit): driver del codec e pin della scheda
-
-Le tre librerie sono in `lib_deps` e vengono scaricate da git senza una versione fissata. In `lib/` è inclusa una copia locale di ESP32-A2DP (1.8.8), che ha la precedenza su quella di `lib_deps`.
+`lib_deps` elenca ESP32-A2DP, U8g2 e ArduinoFFT, ma il codice di questo branch non le usa. In `lib/` è inclusa una copia locale di ESP32-A2DP (1.8.8).
 
 ## Documentazione
 
+- [docs/tentativo_05.md](docs/tentativo_05.md): modifiche del branch `tentativo_05` (passthrough PCM1808 → PCM5102A)
 - [docs/tentativo_04.md](docs/tentativo_04.md): modifiche del branch `tentativo_04` (AudioKitStream)
 - [docs/tentativo_03.md](docs/tentativo_03.md): modifiche del branch `tentativo_03` (init manuale dell'ES8388), unito in `main` con la PR #2
 - [docs/tentativo_02.md](docs/tentativo_02.md): modifiche del branch `tentativo_02` (le librerie in `src/libraries/` descritte lì sono state rimosse in seguito)
