@@ -1,0 +1,30 @@
+name: encoding
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  utf8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Nessun BOM e nessun UTF-8 codificato due volte
+        # Byte cercati nei file di testo tracciati:
+        #   C3 82, C3 83 -> inizio di ², ×, è, ù... codificati due volte
+        #   C3 A2 E2     -> inizio di –, —, →, € codificati due volte
+        #   EF BB BF     -> BOM UTF-8
+        # Questo file non deve contenere i caratteri che corrispondono a questi byte,
+        # altrimenti il controllo segnala se stesso.
+        run: |
+          if LC_ALL=C git grep -nIF -e $'\xC3\x82' -e $'\xC3\x83' -e $'\xC3\xA2\xE2' -e $'\xEF\xBB\xBF'; then
+            echo "::error::Testo UTF-8 codificato due volte (letto come Windows-1252 e salvato di nuovo) o BOM UTF-8 nelle righe sopra."
+            exit 1
+          elif [ $? -ne 1 ]; then
+            echo "::error::git grep non è riuscito."
+            exit 1
+          fi
