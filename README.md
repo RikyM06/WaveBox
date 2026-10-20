@@ -4,22 +4,25 @@
 
 # WaveBox
 
-> **Stato: questa versione funziona, ma i test devono ancora essere terminati.** Dettagli in [docs/tentativo_07.md](docs/tentativo_07.md).
+> **Stato: questa versione funziona, i test hanno dato esiti positivi, ma c'è qualche miglioria da fare.** Dettagli in [docs/tentativo_08.md](docs/tentativo_08.md).
 
-Test di ricezione audio su ESP32 con ADC PCM1808.
+Passthrough audio su ESP32 con ADC PCM1808 e DAC PCM5102A.
 
-Il firmware legge l'audio dal PCM1808 via I2S (48 kHz, 32 bit, stereo) e stampa sulla seriale il livello RMS in dBFS di ogni canale. Passthrough verso il PCM5102A, Bluetooth A2DP e analizzatore di spettro su OLED delle versioni precedenti non sono presenti in questo branch.
+Il firmware legge l'audio dal PCM1808 via I2S (48 kHz, 32 bit, stereo), lo inoltra al PCM5102A con volume digitale al 50% e stampa sulla seriale il livello RMS in dBFS di ogni canale. Bluetooth A2DP e analizzatore di spettro su OLED delle versioni precedenti non sono presenti in questo branch.
 
 ## Funzionalità
 
 - Ingresso I2S dal PCM1808 (I2S_NUM_0, master RX)
-- Barra di livello e dBFS per canale sul monitor seriale ogni ~100 ms
-- Valori minimo e massimo dei campioni
+- Uscita I2S verso il PCM5102A (I2S_NUM_1, master TX)
+- Volume digitale fisso al 50%
+- Barra di livello e dBFS per canale sul monitor seriale ogni 300 ms
 
 ## Hardware
 
 - ESP32 DevKit (esp32dev in PlatformIO)
 - ADC PCM1808: BCK GPIO 2, LRCK GPIO 15, DIN GPIO 16, MCLK GPIO 0
+- DAC PCM5102A: BCK GPIO 26, LRCK GPIO 33, DIN GPIO 21
+
 ## Compilazione e caricamento
 
 Il progetto usa [PlatformIO](https://platformio.org/) (framework Arduino).
@@ -32,15 +35,16 @@ pio device monitor           # monitor seriale (115200 baud)
 
 ## Architettura
 
-Tutto il codice applicativo è in src/main.cpp, con il driver driver/i2s.h di ESP-IDF: setup() configura l'I2S in RX e i pin, loop() legge i campioni, calcola RMS e dBFS e li stampa.
+Tutto il codice applicativo è in src/main.cpp, con il driver driver/i2s.h di ESP-IDF: setup() configura due I2S (RX dal PCM1808, TX verso il PCM5102A), loop() legge i campioni, calcola RMS e dBFS, applica il volume e scrive sull'uscita.
 
 ## Librerie
 
-Nessuna libreria esterna: lib_deps è vuoto. In lib/ resta una copia locale di ESP32-A2DP (1.8.8), non usata in questo branch.
+Nessuna libreria esterna: lib_deps è vuoto. La copia locale di ESP32-A2DP in lib/ è stata rimossa perché non usata.
 
 ## Documentazione
 
-- [docs/tentativo_07.md](docs/tentativo_07.md): modifiche del branch 	entativo_07 (test PCM1808)
+- [docs/tentativo_08.md](docs/tentativo_08.md): modifiche del branch `tentativo_08` (passthrough PCM1808 → PCM5102A funzionante)
+- [docs/tentativo_07.md](docs/tentativo_07.md): modifiche del branch `tentativo_07` (test PCM1808)
 - [docs/tentativo_06.md](docs/tentativo_06.md): modifiche del branch `tentativo_06` (pulizia file e pinout del PCM5102A)
 - [docs/tentativo_05.md](docs/tentativo_05.md): modifiche del branch `tentativo_05` (passthrough PCM1808 → PCM5102A)
 - [docs/tentativo_04.md](docs/tentativo_04.md): modifiche del branch `tentativo_04` (AudioKitStream)
