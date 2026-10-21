@@ -1,6 +1,6 @@
 # Schema elettrico – ESP32 Audio
 
-Collegamenti delle schede di WaveBox, secondo le specifiche ricevute il 21/10/2026. È lo schema di riferimento per costruire il dispositivo: il firmware attuale (`tentativo_08`) non lo segue ancora del tutto, le differenze sono in [Confronto con il firmware attuale](#confronto-con-il-firmware-attuale).
+Collegamenti delle schede di WaveBox, secondo le specifiche ricevute il 21/10/2026. È lo schema di riferimento per costruire il dispositivo: il firmware attuale (branch `main`) non lo segue ancora del tutto, le differenze sono in [Confronto con il firmware attuale](#confronto-con-il-firmware-attuale).
 
 ## 1. PCM5102A – Uscita audio
 
@@ -12,7 +12,7 @@ Collegamenti delle schede di WaveBox, secondo le specifiche ricevute il 21/10/20
 | LCK | GPIO 33 |
 | DIN | GPIO 21 |
 
-Il pin `SCK` del modulo non compare nello schema: come in [tentativo_06.md](tentativo_06.md) resta non collegato e il PCM5102A ricava il clock interno dal BCK.
+Il pin `SCK` del modulo non compare nello schema: resta non collegato, come nel montaggio attuale, e il PCM5102A ricava il clock interno dal BCK.
 
 ## 2. PCM1808 – Ingresso audio
 
@@ -81,16 +81,16 @@ A relè non eccitato (contatti NC) il jack di uscita riceve il DAC PCM5102A; con
 ### I²S condiviso tra ADC e DAC
 
 - PCM1808 e PCM5102A usano gli **stessi** BCK (GPIO 26) e LRCK (GPIO 33): l'ESP32 genera i clock e i due convertitori lavorano alla stessa frequenza di campionamento e con lo stesso formato. Quando tornerà il Bluetooth A2DP (di solito a 44,1 kHz), anche l'ADC girerà alla frequenza della sorgente Bluetooth.
-- Un pin può essere pilotato da una sola periferica, quindi i due driver I²S master separati di `tentativo_08` non vanno bene su questi pin. Le strade possibili sono una sola porta (`I2S_NUM_0`) in full duplex, con `I2S_MODE_TX | I2S_MODE_RX`, `data_out_num = 21` e `data_in_num = 35`, oppure TX master e RX slave sugli stessi BCK/LRCK. La prima è la più semplice.
+- Un pin può essere pilotato da una sola periferica, quindi i due driver I²S master separati del firmware attuale non vanno bene su questi pin. Le strade possibili sono una sola porta (`I2S_NUM_0`) in full duplex, con `I2S_MODE_TX | I2S_MODE_RX`, `data_out_num = 21` e `data_in_num = 35`, oppure TX master e RX slave sugli stessi BCK/LRCK. La prima è la più semplice.
 - GPIO 35 è **solo ingresso** e non ha pull-up/pull-down interni: va bene per DOUT del PCM1808 (dati verso l'ESP32).
 
 ### Clock di sistema del PCM1808
 
-Lo schema non indica il pin `SCKI` (nel modulo `SCK`) del PCM1808. Il PCM1808 non funziona senza un clock di sistema a 256, 384 o 512 volte la frequenza di campionamento, sincrono con BCK e LRCK. In `tentativo_07` e `tentativo_08` arriva dall'MCLK dell'ESP32 su **GPIO 0**. Sull'ESP32 l'MCLK può uscire solo su GPIO 0, 1 o 3, e GPIO 1 e 3 sono la seriale USB: GPIO 0 resta l'unica scelta. Nello schema è libero (il DC del display non è più su GPIO 0, come nel vecchio firmware A2DP).
+Lo schema non indica il pin `SCKI` (nel modulo `SCK`) del PCM1808. Il PCM1808 non funziona senza un clock di sistema a 256, 384 o 512 volte la frequenza di campionamento, sincrono con BCK e LRCK. Nel firmware attuale arriva dall'MCLK dell'ESP32 su **GPIO 0**. Sull'ESP32 l'MCLK può uscire solo su GPIO 0, 1 o 3, e GPIO 1 e 3 sono la seriale USB: GPIO 0 resta l'unica scelta. Nello schema è libero (il DC del display non è più su GPIO 0, come nel vecchio firmware A2DP).
 
 ### Pin di configurazione del PCM1808
 
-Lo schema non cita nemmeno `MD0`, `MD1`, `FMT` e il pin 3,3 V del modulo. Nel cablaggio annotato in `tentativo_07` erano così: `MD0`, `MD1` e `FMT` a GND (PCM1808 slave, formato I²S), `3.3V` a 3V3 e `+5V` a 5V.
+Lo schema non cita nemmeno `MD0`, `MD1`, `FMT` e il pin 3,3 V del modulo. Nel cablaggio usato finora con il firmware attuale sono così: `MD0`, `MD1` e `FMT` a GND (PCM1808 slave, formato I²S), `3.3V` a 3V3 e `+5V` a 5V.
 
 ### Display
 
@@ -110,14 +110,14 @@ Nei jack TRRS la posizione di GND e MIC cambia tra lo standard CTIA (MIC sul man
 
 ### Pin di strapping
 
-Lo schema non usa più GPIO 2 e 15 (BCK e LRCK del PCM1808 in `tentativo_08`), che sono pin di strapping. Restano GPIO 5 (CS del display, a riposo alto, compatibile con l'avvio) e GPIO 0 (verso SCKI del PCM1808, che è un ingresso ad alta impedenza e non porta GPIO 0 basso all'avvio, quindi non forza la modalità download).
+Lo schema non usa più GPIO 2 e 15 (BCK e LRCK del PCM1808 nel firmware attuale), che sono pin di strapping. Restano GPIO 5 (CS del display, a riposo alto, compatibile con l'avvio) e GPIO 0 (verso SCKI del PCM1808, che è un ingresso ad alta impedenza e non porta GPIO 0 basso all'avvio, quindi non forza la modalità download).
 
 ## Confronto con il firmware attuale
 
-`src/main.cpp` di `tentativo_08` usa questi pin:
+`src/main.cpp` sul branch `main` usa questi pin:
 
-| Segnale | Schema | Firmware `tentativo_08` |
-|---------|--------|-------------------------|
+| Segnale | Schema | Firmware attuale |
+|---------|--------|------------------|
 | PCM5102A BCK / LRCK / DIN | GPIO 26 / 33 / 21 | GPIO 26 / 33 / 21 (uguali) |
 | PCM1808 BCK | GPIO 26 (condiviso) | GPIO 2 (`IN_BCK`) |
 | PCM1808 LRCK | GPIO 33 (condiviso) | GPIO 15 (`IN_LRCK`) |

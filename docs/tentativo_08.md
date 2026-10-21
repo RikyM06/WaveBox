@@ -42,7 +42,7 @@ Branch creato da `main` (dopo la PR di `tentativo_07`). Il firmware torna a esse
 
 ## Schema elettrico
 
-Le specifiche delle schede ricevute dopo questo branch sono in [schema_elettrico.md](schema_elettrico.md). Il PCM5102A è già collegato come previsto (GPIO 26, 33, 21); il PCM1808 invece nello schema condivide BCK (GPIO 26) e LRCK (GPIO 33) con il DAC e ha DOUT su GPIO 35, mentre qui usa GPIO 2, 15 e 16 su una porta I²S separata. Lo schema aggiunge anche il display (DC GPIO 19, RST GPIO 4) e un relè di selezione dell'uscita su GPIO 27.
+Le specifiche delle schede, ricevute il 21/10/2026, sono in [schema_elettrico.md](schema_elettrico.md). Il PCM5102A è già collegato come previsto (GPIO 26, 33, 21); il PCM1808 invece nello schema condivide BCK (GPIO 26) e LRCK (GPIO 33) con il DAC e ha DOUT su GPIO 35, mentre qui usa GPIO 2, 15 e 16 su una porta I²S separata. Lo schema aggiunge anche il display (DC GPIO 19, RST GPIO 4) e un relè di selezione dell'uscita su GPIO 27.
 
 ## Prossimi passi
 

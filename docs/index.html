@@ -174,7 +174,7 @@
 								</div>
 								<p>Alimentazioni: PCM5102A, PCM1808 e relè a 5 V, display a 3,3 V.
 								Lo schema completo, con le note e i punti ancora da chiarire, è nello
-								<a href="https://github.com/RikyM06/WaveBox/blob/main/docs/schema_elettrico.md">schema elettrico</a>.</p>
+								<a href="schema_elettrico.html">schema elettrico</a>.</p>
 								<p>L'uscita del PCM5102A è di <strong>linea</strong>: servono casse <strong>amplificate</strong>.
 								Per casse passive va aggiunto un amplificatore (per esempio PAM8403 o TPA3116).</p>
 								<h3>Firmware</h3>
@@ -189,13 +189,13 @@
 									<h2>Stato del progetto</h2>
 									<p>La versione attuale <strong>funziona</strong>: i test hanno dato esiti positivi, ma c'è qualche miglioria da fare.</p>
 								</header>
-								<p>Nel branch <code>tentativo_08</code> il firmware è un passthrough: legge l'audio dall'ADC PCM1808 via I²S,
+								<p>Nella versione attuale (branch <code>main</code>) il firmware è un passthrough: legge l'audio dall'ADC PCM1808 via I²S,
 								lo inoltra al DAC PCM5102A con volume al 50% e mostra sulla seriale il livello di ogni canale in dBFS.
 								Bluetooth e display non sono presenti in questa versione.</p>
-								<p>Il firmware deve ancora essere adattato allo schema elettrico: oggi il PCM1808 usa pin e clock I²S separati
+								<p>Il firmware deve ancora essere adattato allo <a href="schema_elettrico.html">schema elettrico</a>: oggi il PCM1808 usa pin e clock I²S separati
 								dal DAC, e relè e display non sono gestiti.</p>
 								<p>Il prossimo passo è applicare le migliorie e riportare Bluetooth A2DP e spettro su OLED.
-								<a href="https://github.com/RikyM06/WaveBox/blob/main/docs/tentativo_08.md">Dettagli delle modifiche</a>.</p>
+								<a href="tentativo_08.html">Dettagli del firmware attuale</a>.</p>
 							</section>
 
 						<!-- Open source -->

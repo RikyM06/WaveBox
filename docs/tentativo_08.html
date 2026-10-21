@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<!--
+	WaveBox - firmware attuale
+	Versione HTML di docs/tentativo_08.md, riferita al branch main: quando cambia uno dei due, aggiornare anche l'altro.
+	Basato su Stellar by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="it">
+	<head>
+		<title>Firmware attuale – WaveBox</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Firmware attuale di WaveBox: passthrough audio su ESP32 dall'ADC PCM1808 al DAC PCM5102A via I²S, con livelli in dBFS sulla seriale." />
+		<meta name="author" content="Riccardo Melis" />
+		<link rel="icon" type="image/svg+xml" href="images/logo.svg" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<span class="logo"><img src="images/logo.svg" alt="Logo WaveBox" /></span>
+						<h1>Firmware attuale</h1>
+						<p>Passthrough audio PCM1808 → PCM5102A, versione sul branch <code>main</code></p>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="#firmware" class="active">Il firmware</a></li>
+							<li><a href="#schema">Schema elettrico</a></li>
+							<li><a href="#test">Test</a></li>
+							<li><a href="#migliorie">Migliorie</a></li>
+							<li><a href="#prossimi">Prossimi passi</a></li>
+							<li><a href="index.html">Il progetto</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Il firmware -->
+							<section id="firmware" class="main">
+								<header class="major">
+									<h2>Passthrough PCM1808 → PCM5102A</h2>
+									<p>Questa versione <strong>funziona</strong>: i test hanno dato esiti positivi,
+									ma ci sono ancora alcune migliorie da fare.</p>
+								</header>
+								<p>Il firmware è un <strong>passthrough audio</strong>: il PCM1808 legge l'ingresso analogico,
+								l'ESP32 lo inoltra via I²S al PCM5102A e stampa i livelli sulla seriale.</p>
+
+								<h3><code>src/main.cpp</code></h3>
+								<ul>
+									<li>Due driver I²S indipendenti, entrambi master a 48 kHz, 32 bit, stereo, formato I²S standard:
+										<ul>
+											<li><strong>INPUT</strong> (<code>I2S_NUM_0</code>, RX) dal PCM1808: BCK GPIO 2, LRCK GPIO 15,
+											dati GPIO 16, MCLK GPIO 0.</li>
+											<li><strong>OUTPUT</strong> (<code>I2S_NUM_1</code>, TX) verso il PCM5102A: BCK GPIO 26, LRCK GPIO 33,
+											DIN GPIO 21 (nessun MCLK, il PCM5102A lo ricava dal BCK).</li>
+										</ul>
+									</li>
+									<li><code>loop()</code> legge 512 campioni dal PCM1808, applica un volume digitale fisso del 50%
+									(<code>audioBuffer[i] /= 2</code>) e scrive il buffer sul PCM5102A, gestendo le scritture parziali.</li>
+									<li>Ogni 300 ms calcola il valore RMS in dBFS per canale (campioni portati a 24 bit) e stampa sulla
+									seriale (115200 baud) una barra di livello a 30 caratteri.</li>
+									<li><code>checkError()</code> ferma il firmware con un messaggio se l'installazione di un driver I²S
+									o la configurazione dei pin fallisce.</li>
+									<li>Non sono presenti Bluetooth A2DP, display OLED e spettro.</li>
+								</ul>
+
+								<h3><code>platformio.ini</code></h3>
+								<ul>
+									<li>Piattaforma <code>espressif32</code> 6.10.0, framework Arduino, nessuna libreria esterna: il firmware
+									usa solo il driver <code>driver/i2s.h</code> di ESP-IDF.</li>
+									<li><code>upload_port</code> e <code>monitor_port</code> sono su <code>/dev/cu.SLAB_USBtoUART</code>
+									(porta macOS): su altre macchine vanno adattate.</li>
+								</ul>
+
+								<h3>File rimossi</h3>
+								<ul>
+									<li><code>lib/ESP32-A2DP-main/</code>: copia locale della libreria Bluetooth, non usata dal firmware.
+									Reintegrando A2DP si potrà riaggiungere come dipendenza di <code>platformio.ini</code>.</li>
+									<li><code>include/README</code>, <code>lib/README</code>, <code>test/README</code>: testi standard
+									di PlatformIO, non servono.</li>
+									<li><code>src/._main.cpp</code>: metadato macOS, già ignorato da git.</li>
+								</ul>
+							</section>
+
+						<!-- Schema elettrico -->
+							<section id="schema" class="main">
+								<h2>Schema elettrico</h2>
+								<p>Le specifiche delle schede, ricevute il 21/10/2026, sono nello <a href="schema_elettrico.html">schema elettrico</a>.
+								Il PCM5102A è già collegato come previsto (GPIO 26, 33, 21); il PCM1808 invece nello schema condivide
+								BCK (GPIO 26) e LRCK (GPIO 33) con il DAC e ha DOUT su GPIO 35, mentre il firmware usa GPIO 2, 15 e 16
+								su una porta I²S separata. Lo schema aggiunge anche il display (DC GPIO 19, RST GPIO 4) e un relè
+								di selezione dell'uscita su GPIO 27.</p>
+							</section>
+
+						<!-- Test -->
+							<section id="test" class="main">
+								<h2>Test</h2>
+								<ul>
+									<li>Il segnale in ingresso al PCM1808 arriva sull'uscita del PCM5102A.</li>
+									<li>I livelli stampati sulla seriale seguono il segnale.</li>
+									<li>Esiti positivi.</li>
+								</ul>
+							</section>
+
+						<!-- Migliorie da fare -->
+							<section id="migliorie" class="main">
+								<h2>Migliorie da fare</h2>
+								<ul>
+									<li>Il volume è fisso al 50% e fatto con una divisione intera: renderlo configurabile.</li>
+									<li>Il passthrough è bloccante nel <code>loop()</code>: valutare un task dedicato su un core.</li>
+									<li>Misurare con più calma latenza, rumore di fondo e risposta in frequenza.</li>
+									<li><code>upload_port</code>/<code>monitor_port</code> sono specifici di macOS.</li>
+									<li>Aggiungere un controllo sul rilevamento di clipping in ingresso.</li>
+								</ul>
+							</section>
+
+						<!-- Prossimi passi -->
+							<section id="prossimi" class="main">
+								<h2>Prossimi passi</h2>
+								<ol>
+									<li>Applicare le migliorie sopra.</li>
+									<li>Adattare il firmware allo <a href="schema_elettrico.html">schema elettrico</a>: I²S condiviso tra ADC e DAC,
+									PCM1808 su GPIO 26/33/35, comando del relè.</li>
+									<li>Reintegrare Bluetooth A2DP come seconda sorgente.</li>
+									<li>Reintegrare lo spettro su display OLED.</li>
+								</ol>
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section>
+							<h2>WaveBox</h2>
+							<p>Ricevitore audio Bluetooth basato su ESP32, con ingresso AUX e visualizzazione del segnale in tempo reale.</p>
+							<ul class="actions">
+								<li><a href="index.html" class="button">Torna al progetto</a></li>
+							</ul>
+						</section>
+						<section>
+							<h2>Documenti</h2>
+							<p>Lo schema elettrico e i sorgenti del progetto.</p>
+							<ul class="actions">
+								<li><a href="schema_elettrico.html" class="button">Schema elettrico</a></li>
+								<li><a href="https://github.com/RikyM06/WaveBox" class="button">Sorgenti su GitHub</a></li>
+							</ul>
+						</section>
+						<p class="copyright">&copy; 2026 Riccardo Melis. Codice MIT, contenuti CC BY 4.0. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
+<!-- Data ultimo aggiornamento: 21/10/2026 21:36 -->
