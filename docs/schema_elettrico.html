@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+<!--
+	WaveBox - schema elettrico
+	Versione HTML di docs/schema_elettrico.md: quando cambia uno dei due, aggiornare anche l'altro.
+	Basato su Stellar by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="it">
+	<head>
+		<title>Schema elettrico – WaveBox</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Schema elettrico di WaveBox: collegamenti all'ESP32 di DAC PCM5102A, ADC PCM1808, display OLED SSD1322, jack TRRS di ingresso e relè DPDT di selezione dell'uscita." />
+		<meta name="author" content="Riccardo Melis" />
+		<link rel="icon" type="image/svg+xml" href="images/logo.svg" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<span class="logo"><img src="images/logo.svg" alt="Logo WaveBox" /></span>
+						<h1>Schema elettrico</h1>
+						<p>Collegamenti delle schede di WaveBox all'ESP32</p>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="#collegamenti" class="active">Collegamenti</a></li>
+							<li><a href="#gpio">GPIO</a></li>
+							<li><a href="#note">Note tecniche</a></li>
+							<li><a href="#firmware">Firmware</a></li>
+							<li><a href="#punti-aperti">Punti aperti</a></li>
+							<li><a href="index.html">Il progetto</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Collegamenti -->
+							<section id="collegamenti" class="main">
+								<header class="major">
+									<h2>Collegamenti</h2>
+									<p>Secondo le specifiche delle schede ricevute il 21/10/2026.</p>
+								</header>
+								<p>È lo schema di riferimento per costruire il dispositivo. Il firmware attuale (branch <code>main</code>)
+								non lo segue ancora del tutto: le differenze sono nel <a href="#firmware">confronto con il firmware attuale</a>.</p>
+								<span class="image fit"><img src="images/schema-a-blocchi.svg" alt="Schema a blocchi: lo smartphone via Bluetooth e la sorgente AUX tramite jack TRRS e ADC PCM1808 entrano nell'ESP32, che pilota il DAC PCM5102A, il relè di selezione dell'uscita verso il jack e le casse, e il display OLED SSD1322" /></span>
+
+								<h3>1. PCM5102A – Uscita audio</h3>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr><th>PCM5102A</th><th>ESP32</th></tr>
+										</thead>
+										<tbody>
+											<tr><td>VIN</td><td>5V</td></tr>
+											<tr><td>GND</td><td>GND</td></tr>
+											<tr><td>BCK</td><td>GPIO 26</td></tr>
+											<tr><td>LCK</td><td>GPIO 33</td></tr>
+											<tr><td>DIN</td><td>GPIO 21</td></tr>
+										</tbody>
+									</table>
+								</div>
+								<p>Il pin <code>SCK</code> del modulo non compare nello schema: resta non collegato, come nel montaggio attuale,
+								e il PCM5102A ricava il clock interno dal BCK.</p>
+
+								<h3>2. PCM1808 – Ingresso audio</h3>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr><th>PCM1808</th><th>ESP32</th></tr>
+										</thead>
+										<tbody>
+											<tr><td>VCC</td><td>5V</td></tr>
+											<tr><td>GND</td><td>GND</td></tr>
+											<tr><td>BCK</td><td>GPIO 26</td></tr>
+											<tr><td>LRCK</td><td>GPIO 33</td></tr>
+											<tr><td>DOUT</td><td>GPIO 35</td></tr>
+										</tbody>
+									</table>
+								</div>
+
+								<h3>3. Display OLED SSD1322 – SPI 4 fili</h3>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr><th>SSD1322</th><th>ESP32</th></tr>
+										</thead>
+										<tbody>
+											<tr><td>VCC</td><td>3V3</td></tr>
+											<tr><td>GND</td><td>GND</td></tr>
+											<tr><td>SCK / CLK</td><td>GPIO 18</td></tr>
+											<tr><td>SDA / MOSI</td><td>GPIO 23</td></tr>
+											<tr><td>CS</td><td>GPIO 5</td></tr>
+											<tr><td>DC</td><td>GPIO 19</td></tr>
+											<tr><td>RST</td><td>GPIO 4</td></tr>
+										</tbody>
+									</table>
+								</div>
+
+								<h3>4. Jack TRRS – Ingresso audio</h3>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr><th>Jack</th><th>PCM1808</th></tr>
+										</thead>
+										<tbody>
+											<tr><td>L</td><td>LIN</td></tr>
+											<tr><td>R</td><td>RIN</td></tr>
+											<tr><td>GND</td><td>AGND</td></tr>
+											<tr><td>MIC</td><td>non collegato</td></tr>
+										</tbody>
+									</table>
+								</div>
+
+								<h3>5. Relè DPDT – Selezione uscita audio</h3>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr><th>Relè</th><th>Collegamento</th></tr>
+										</thead>
+										<tbody>
+											<tr><td>COM1</td><td>Jack uscita L</td></tr>
+											<tr><td>COM2</td><td>Jack uscita R</td></tr>
+											<tr><td>NC1</td><td>PCM5102A L</td></tr>
+											<tr><td>NC2</td><td>PCM5102A R</td></tr>
+											<tr><td>NO1</td><td>Audio pass-through L</td></tr>
+											<tr><td>NO2</td><td>Audio pass-through R</td></tr>
+											<tr><td>IN</td><td>GPIO 27 (proposto)</td></tr>
+											<tr><td>VCC</td><td>5V (se compatibile)</td></tr>
+											<tr><td>GND</td><td>GND</td></tr>
+										</tbody>
+									</table>
+								</div>
+								<p>A relè non eccitato (contatti NC) il jack di uscita riceve il DAC PCM5102A; con il relè eccitato
+								riceve il segnale di pass-through.</p>
+							</section>
+
+						<!-- Riepilogo GPIO -->
+							<section id="gpio" class="main">
+								<h2>Riepilogo GPIO ESP32</h2>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr><th>GPIO</th><th>Funzione</th></tr>
+										</thead>
+										<tbody>
+											<tr><td>GPIO 4</td><td>OLED RST</td></tr>
+											<tr><td>GPIO 5</td><td>OLED CS</td></tr>
+											<tr><td>GPIO 18</td><td>OLED SCK</td></tr>
+											<tr><td>GPIO 19</td><td>OLED DC</td></tr>
+											<tr><td>GPIO 21</td><td>PCM5102A DIN</td></tr>
+											<tr><td>GPIO 23</td><td>OLED MOSI</td></tr>
+											<tr><td>GPIO 26</td><td>I²S BCK condiviso</td></tr>
+											<tr><td>GPIO 27</td><td>Comando relè (proposto)</td></tr>
+											<tr><td>GPIO 33</td><td>I²S LRCK condiviso</td></tr>
+											<tr><td>GPIO 35</td><td>PCM1808 DOUT</td></tr>
+										</tbody>
+									</table>
+								</div>
+							</section>
+
+						<!-- Note tecniche -->
+							<section id="note" class="main">
+								<h2>Note tecniche</h2>
+
+								<h3>I²S condiviso tra ADC e DAC</h3>
+								<ul>
+									<li>PCM1808 e PCM5102A usano gli <strong>stessi</strong> BCK (GPIO 26) e LRCK (GPIO 33): l'ESP32 genera i clock
+									e i due convertitori lavorano alla stessa frequenza di campionamento e con lo stesso formato.
+									Quando tornerà il Bluetooth A2DP (di solito a 44,1 kHz), anche l'ADC girerà alla frequenza della sorgente Bluetooth.</li>
+									<li>Un pin può essere pilotato da una sola periferica, quindi i due driver I²S master separati del firmware attuale
+									non vanno bene su questi pin. Le strade possibili sono una sola porta (<code>I2S_NUM_0</code>) in full duplex, con
+									<code>I2S_MODE_TX | I2S_MODE_RX</code>, <code>data_out_num = 21</code> e <code>data_in_num = 35</code>, oppure
+									TX master e RX slave sugli stessi BCK/LRCK. La prima è la più semplice.</li>
+									<li>GPIO 35 è <strong>solo ingresso</strong> e non ha pull-up/pull-down interni: va bene per DOUT del PCM1808
+									(dati verso l'ESP32).</li>
+								</ul>
+
+								<h3>Clock di sistema del PCM1808</h3>
+								<p>Lo schema non indica il pin <code>SCKI</code> (nel modulo <code>SCK</code>) del PCM1808. Il PCM1808 non funziona
+								senza un clock di sistema a 256, 384 o 512 volte la frequenza di campionamento, sincrono con BCK e LRCK.
+								Nel firmware attuale arriva dall'MCLK dell'ESP32 su <strong>GPIO 0</strong>. Sull'ESP32 l'MCLK può uscire solo
+								su GPIO 0, 1 o 3, e GPIO 1 e 3 sono la seriale USB: GPIO 0 resta l'unica scelta. Nello schema è libero
+								(il DC del display non è più su GPIO 0, come nel vecchio firmware A2DP).</p>
+
+								<h3>Pin di configurazione del PCM1808</h3>
+								<p>Lo schema non cita nemmeno <code>MD0</code>, <code>MD1</code>, <code>FMT</code> e il pin 3,3 V del modulo.
+								Nel cablaggio usato finora con il firmware attuale sono così: <code>MD0</code>, <code>MD1</code> e <code>FMT</code>
+								a GND (PCM1808 slave, formato I²S), <code>3.3V</code> a 3V3 e <code>+5V</code> a 5V.</p>
+
+								<h3>Display</h3>
+								<ul>
+									<li>Rispetto al vecchio firmware A2DP il DC passa da GPIO 0 a GPIO 19 e il reset non è più fisso a 3V3 ma su GPIO 4.
+									Con U8g2 il costruttore diventa
+									<code>U8G2_SSD1322_NHD_256X64_F_4W_HW_SPI u8g2(U8G2_R0, /*cs=*/ 5, /*dc=*/ 19, /*reset=*/ 4);</code>.</li>
+									<li>SCK e MOSI sono i pin VSPI di default dell'ESP32 (18 e 23), quindi si può usare lo SPI hardware.</li>
+								</ul>
+
+								<h3>Relè</h3>
+								<ul>
+									<li>Il GPIO non può alimentare la bobina di un relè: serve un modulo relè con transistor di pilotaggio e diodo
+									(o un transistor e un diodo di ricircolo esterni).</li>
+									<li>"VCC 5V (se compatibile)": con un modulo a 5 V bisogna verificare che l'ingresso <code>IN</code> commuti
+									con i 3,3 V dell'ESP32 e se è attivo alto o attivo basso.</li>
+									<li>GPIO 27 non è un pin di strapping: all'avvio il relè resta a riposo e l'uscita è quella del DAC.</li>
+									<li>Commutare il relè con l'audio presente può produrre un "clic": conviene mettere in muto l'uscita
+									(in firmware o con il pin <code>XSMT</code> del PCM5102A) durante il cambio.</li>
+								</ul>
+
+								<h3>Jack TRRS</h3>
+								<p>Nei jack TRRS la posizione di GND e MIC cambia tra lo standard CTIA (MIC sul manicotto) e OMTP
+								(GND sul manicotto): va verificato quale polo è GND sul jack usato prima di collegarlo ad AGND.</p>
+
+								<h3>Pin di strapping</h3>
+								<p>Lo schema non usa più GPIO 2 e 15 (BCK e LRCK del PCM1808 nel firmware attuale), che sono pin di strapping.
+								Restano GPIO 5 (CS del display, a riposo alto, compatibile con l'avvio) e GPIO 0 (verso SCKI del PCM1808,
+								che è un ingresso ad alta impedenza e non porta GPIO 0 basso all'avvio, quindi non forza la modalità download).</p>
+							</section>
+
+						<!-- Confronto con il firmware attuale -->
+							<section id="firmware" class="main">
+								<h2>Confronto con il firmware attuale</h2>
+								<p><code>src/main.cpp</code> sul branch <code>main</code> usa questi pin
+								(dettagli nella pagina del <a href="tentativo_08.html">firmware attuale</a>):</p>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr><th>Segnale</th><th>Schema</th><th>Firmware attuale</th></tr>
+										</thead>
+										<tbody>
+											<tr><td>PCM5102A BCK / LRCK / DIN</td><td>GPIO 26 / 33 / 21</td><td>GPIO 26 / 33 / 21 (uguali)</td></tr>
+											<tr><td>PCM1808 BCK</td><td>GPIO 26 (condiviso)</td><td>GPIO 2 (<code>IN_BCK</code>)</td></tr>
+											<tr><td>PCM1808 LRCK</td><td>GPIO 33 (condiviso)</td><td>GPIO 15 (<code>IN_LRCK</code>)</td></tr>
+											<tr><td>PCM1808 DOUT</td><td>GPIO 35</td><td>GPIO 16 (<code>IN_DOUT</code>)</td></tr>
+											<tr><td>PCM1808 SCKI (MCLK)</td><td>non indicato</td><td>GPIO 0 (<code>IN_MCLK</code>)</td></tr>
+											<tr><td>Porte I²S</td><td>una, BCK/LRCK condivisi</td><td>due master: <code>I2S_NUM_0</code> RX e <code>I2S_NUM_1</code> TX</td></tr>
+											<tr><td>Display SSD1322</td><td>GPIO 18, 23, 5, 19, 4</td><td>non presente</td></tr>
+											<tr><td>Relè</td><td>GPIO 27</td><td>non presente</td></tr>
+										</tbody>
+									</table>
+								</div>
+								<p>Per seguire lo schema il firmware deve passare a un I²S condiviso (vedi le <a href="#note">note tecniche</a>),
+								spostare il PCM1808 su GPIO 26/33/35 e aggiungere display e relè.</p>
+							</section>
+
+						<!-- Punti aperti -->
+							<section id="punti-aperti" class="main">
+								<h2>Punti aperti</h2>
+								<p>Da chiarire con chi ha fornito le specifiche:</p>
+								<ol>
+									<li>Pin <code>SCKI</code> del PCM1808: confermare GPIO 0.</li>
+									<li><code>MD0</code>, <code>MD1</code>, <code>FMT</code> e alimentazione 3,3 V del modulo PCM1808.</li>
+									<li>Da dove arriva il segnale "Audio pass-through" sui contatti NO del relè (per esempio direttamente dal jack di ingresso).</li>
+									<li>GPIO 27 per il relè è "proposto": confermarlo, insieme al modulo relè (tensione, livello logico, attivo alto o basso).</li>
+									<li>Standard (CTIA o OMTP) del jack TRRS di ingresso.</li>
+								</ol>
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section>
+							<h2>WaveBox</h2>
+							<p>Ricevitore audio Bluetooth basato su ESP32, con ingresso AUX e visualizzazione del segnale in tempo reale.</p>
+							<ul class="actions">
+								<li><a href="index.html" class="button">Torna al progetto</a></li>
+							</ul>
+						</section>
+						<section>
+							<h2>Documenti</h2>
+							<p>Il firmware attuale e i sorgenti del progetto.</p>
+							<ul class="actions">
+								<li><a href="tentativo_08.html" class="button">Firmware attuale</a></li>
+								<li><a href="https://github.com/RikyM06/WaveBox" class="button">Sorgenti su GitHub</a></li>
+							</ul>
+						</section>
+						<p class="copyright">&copy; 2026 Riccardo Melis. Codice MIT, contenuti CC BY 4.0. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
+<!-- Data ultimo aggiornamento: 21/10/2026 21:36 -->

@@ -19,9 +19,18 @@ Il firmware legge l'audio dal PCM1808 via I2S (48 kHz, 32 bit, stereo), lo inolt
 
 ## Hardware
 
-- ESP32 DevKit (esp32dev in PlatformIO)
-- ADC PCM1808: BCK GPIO 2, LRCK GPIO 15, DIN GPIO 16, MCLK GPIO 0
-- DAC PCM5102A: BCK GPIO 26, LRCK GPIO 33, DIN GPIO 21
+Lo schema elettrico completo, con le note e i punti ancora aperti, è in [docs/schema_elettrico.md](docs/schema_elettrico.md).
+
+| Scheda | Collegamento all'ESP32 |
+|--------|------------------------|
+| ESP32 DevKit (`esp32dev` in PlatformIO) | — |
+| DAC PCM5102A (uscita) | BCK GPIO 26, LCK GPIO 33, DIN GPIO 21, VIN 5V |
+| ADC PCM1808 (ingresso) | BCK GPIO 26 e LRCK GPIO 33 condivisi con il DAC, DOUT GPIO 35, VCC 5V |
+| OLED SSD1322 256×64, SPI 4 fili | SCK GPIO 18, MOSI GPIO 23, CS GPIO 5, DC GPIO 19, RST GPIO 4, VCC 3V3 |
+| Jack TRRS (ingresso) | L, R e GND verso LIN, RIN e AGND del PCM1808; MIC non collegato |
+| Relè DPDT (selezione uscita) | IN GPIO 27 (proposto): a riposo il jack di uscita riceve il PCM5102A, eccitato riceve il pass-through |
+
+Il firmware attuale non segue ancora lo schema per il PCM1808: usa BCK GPIO 2, LRCK GPIO 15, DOUT GPIO 16 e MCLK GPIO 0, su una porta I2S separata. Display e relè non sono gestiti.
 
 ## Compilazione e caricamento
 
@@ -43,6 +52,7 @@ Nessuna libreria esterna: lib_deps è vuoto. La copia locale di ESP32-A2DP in li
 
 ## Documentazione
 
+- [docs/schema_elettrico.md](docs/schema_elettrico.md): schema elettrico completo (PCM5102A, PCM1808, OLED, jack TRRS, relè, riepilogo GPIO)
 - [docs/tentativo_08.md](docs/tentativo_08.md): modifiche del branch `tentativo_08` (passthrough PCM1808 → PCM5102A funzionante)
 - [docs/tentativo_07.md](docs/tentativo_07.md): modifiche del branch `tentativo_07` (test PCM1808)
 - [docs/tentativo_06.md](docs/tentativo_06.md): modifiche del branch `tentativo_06` (pulizia file e pinout del PCM5102A)
