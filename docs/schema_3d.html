@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<!--
+	WaveBox - modello 3D dello schema elettrico
+	I collegamenti sono in assets/js/schema3d.js: quando cambia docs/schema_elettrico.md, aggiornare anche quel file.
+	Basato su Stellar by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html lang="it">
+	<head>
+		<title>Modello 3D – WaveBox</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Modello 3D interattivo dello schema elettrico di WaveBox: ESP32, DAC PCM5102A, ADC PCM1808, display OLED SSD1322, jack e relè DPDT con tutti i collegamenti." />
+		<meta name="author" content="Riccardo Melis" />
+		<link rel="icon" type="image/svg+xml" href="images/logo.svg" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/schema3d.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "./assets/js/three/three.module.js",
+					"three/addons/": "./assets/js/three/addons/"
+				}
+			}
+		</script>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<span class="logo"><img src="images/logo.svg" alt="Logo WaveBox" /></span>
+						<h1>Modello 3D</h1>
+						<p>Lo schema elettrico di WaveBox in tre dimensioni</p>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="#modello" class="active">Il modello</a></li>
+							<li><a href="#legenda">Legenda</a></li>
+							<li><a href="#note">Cosa rappresenta</a></li>
+							<li><a href="schema_elettrico.html">Schema elettrico</a></li>
+							<li><a href="index.html">Il progetto</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Modello -->
+							<section id="modello" class="main">
+								<header class="major">
+									<h2>Schede e collegamenti</h2>
+									<p>Ogni filo è una riga dello <a href="schema_elettrico.html">schema elettrico</a>.</p>
+								</header>
+								<p>Trascina per ruotare, usa la rotellina (o due dita) per lo zoom e il tasto destro per spostare la vista.
+								Passa sopra un filo, un pin o una scheda per leggerne i collegamenti; con un clic su una scheda
+								il dettaglio compare sotto il modello.</p>
+								<div id="scena-3d">
+									<p class="attesa-3d">Caricamento del modello 3D…</p>
+									<noscript><p class="attesa-3d">Per vedere il modello 3D serve JavaScript. I collegamenti sono nelle tabelle dello <a href="schema_elettrico.html">schema elettrico</a>.</p></noscript>
+									<div id="tooltip-3d" hidden></div>
+								</div>
+								<div class="comandi-3d">
+									<ul class="actions">
+										<li><a href="#modello" id="vista-reset" class="button small">Reimposta la vista</a></li>
+										<li><a href="#modello" id="vista-alto" class="button small">Vista dall'alto</a></li>
+										<li><a href="#modello" id="rotazione" class="button small">Rotazione automatica</a></li>
+									</ul>
+									<input type="checkbox" id="nomi-pin" />
+									<label for="nomi-pin">Mostra i nomi dei pin</label>
+								</div>
+							</section>
+
+						<!-- Legenda e dettaglio -->
+							<section id="legenda" class="main">
+								<div class="row">
+									<div class="col-5 col-12-medium">
+										<h2>Legenda</h2>
+										<p>Il colore del filo indica il segnale. Togli la spunta per nascondere un gruppo di fili.</p>
+										<ul id="legenda-3d" class="legenda-3d"></ul>
+									</div>
+									<div class="col-7 col-12-medium">
+										<div id="info-3d">
+											<h2>Dettaglio</h2>
+											<p>Fai clic su una scheda del modello per vedere qui tutti i suoi collegamenti,
+											oppure su un filo per vederne gli estremi.</p>
+										</div>
+									</div>
+								</div>
+							</section>
+
+						<!-- Cosa rappresenta -->
+							<section id="note" class="main">
+								<h2>Cosa rappresenta</h2>
+								<ul>
+									<li>Le schede sono quelle dello schema elettrico: ESP32 DevKitC, DAC PCM5102A, ADC PCM1808,
+									display OLED SSD1322, jack TRRS di ingresso, relè DPDT e jack di uscita.</li>
+									<li>Ogni filo collega due pin come indicato nelle tabelle dello schema. BCK (GPIO 26) e LRCK (GPIO 33)
+									sono <strong>condivisi</strong>: dallo stesso pin dell'ESP32 partono due fili, uno per convertitore.</li>
+									<li>I fili <strong>tratteggiati</strong> sono collegamenti non ancora confermati: il comando del relè
+									su GPIO 27 (proposto) e il pass-through sui contatti NO, la cui origine è da definire.</li>
+									<li>I pin <strong>grigi</strong> non sono indicati nello schema (per esempio il clock di sistema SCKI
+									del PCM1808 o il GND del jack di uscita): passandoci sopra si legge la nota.
+									L'elenco completo è nei <a href="schema_elettrico.html#punti-aperti">punti aperti</a>.</li>
+									<li>La disposizione dei pin dell'ESP32 è quella della DevKitC a 38 pin: su altre schede la posizione
+									cambia, i numeri GPIO no.</li>
+									<li>Dimensioni e posizioni delle schede sono indicative: il modello mostra i collegamenti, non è un
+									disegno meccanico né il montaggio definitivo.</li>
+								</ul>
+								<p>Il modello è realizzato con <a href="https://threejs.org/">three.js</a> (licenza MIT), incluso nel sito.</p>
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section>
+							<h2>WaveBox</h2>
+							<p>Ricevitore audio Bluetooth basato su ESP32, con ingresso AUX e visualizzazione del segnale in tempo reale.</p>
+							<ul class="actions">
+								<li><a href="index.html" class="button">Torna al progetto</a></li>
+							</ul>
+						</section>
+						<section>
+							<h2>Documenti</h2>
+							<p>Lo schema elettrico, il firmware attuale e i sorgenti del progetto.</p>
+							<ul class="actions">
+								<li><a href="schema_elettrico.html" class="button">Schema elettrico</a></li>
+								<li><a href="tentativo_08.html" class="button">Firmware attuale</a></li>
+							</ul>
+						</section>
+						<p class="copyright">&copy; 2026 Riccardo Melis. Codice MIT, contenuti CC BY 4.0. Design: <a href="https://html5up.net">HTML5 UP</a>. Modello 3D con <a href="https://threejs.org/">three.js</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script type="module" src="assets/js/schema3d.js"></script>
+
+	</body>
+</html>
+<!-- Data ultimo aggiornamento: 21/10/2026 22:30 -->
