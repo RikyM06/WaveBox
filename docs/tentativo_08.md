@@ -40,8 +40,13 @@ Branch creato da `main` (dopo la PR di `tentativo_07`). Il firmware torna a esse
 - `upload_port`/`monitor_port` sono specifici di macOS.
 - Aggiungere un controllo sul rilevamento di clipping in ingresso.
 
+## Schema elettrico
+
+Le specifiche delle schede ricevute dopo questo branch sono in [schema_elettrico.md](schema_elettrico.md). Il PCM5102A è già collegato come previsto (GPIO 26, 33, 21); il PCM1808 invece nello schema condivide BCK (GPIO 26) e LRCK (GPIO 33) con il DAC e ha DOUT su GPIO 35, mentre qui usa GPIO 2, 15 e 16 su una porta I²S separata. Lo schema aggiunge anche il display (DC GPIO 19, RST GPIO 4) e un relè di selezione dell'uscita su GPIO 27.
+
 ## Prossimi passi
 
 1. Applicare le migliorie sopra.
-2. Reintegrare Bluetooth A2DP come seconda sorgente.
-3. Reintegrare lo spettro su display OLED.
+2. Adattare il firmware allo [schema elettrico](schema_elettrico.md): I²S condiviso tra ADC e DAC, PCM1808 su GPIO 26/33/35, comando del relè.
+3. Reintegrare Bluetooth A2DP come seconda sorgente.
+4. Reintegrare lo spettro su display OLED.

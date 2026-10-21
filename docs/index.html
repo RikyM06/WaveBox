@@ -80,8 +80,8 @@
 									<li>
 										<span class="icon solid major style3 fa-plug"></span>
 										<h3>Ingresso AUX</h3>
-										<p>Una sorgente analogica (lettore, PC, strumento) entra dal convertitore PCM1808
-										e viene inoltrata all'uscita.</p>
+										<p>Una sorgente analogica (lettore, PC, strumento) entra dal jack TRRS nel convertitore PCM1808
+										e viene inoltrata all'uscita. Un relè sceglie se il jack di uscita riceve il DAC o il pass-through.</p>
 									</li>
 									<li>
 										<span class="icon solid major style5 fa-wave-square"></span>
@@ -98,7 +98,7 @@
 									<h2>Hardware</h2>
 									<p>Moduli separati e facili da trovare, collegati all'ESP32 tramite I²S e SPI.</p>
 								</header>
-								<span class="image fit"><img src="images/schema-a-blocchi.svg" alt="Schema a blocchi: smartphone e sorgente AUX entrano nell'ESP32, che pilota il DAC PCM5102A verso il jack e il display OLED SSD1322" /></span>
+								<span class="image fit"><img src="images/schema-a-blocchi.svg" alt="Schema a blocchi: lo smartphone via Bluetooth e la sorgente AUX tramite jack TRRS e ADC PCM1808 entrano nell'ESP32, che pilota il DAC PCM5102A, il relè di selezione dell'uscita verso il jack e le casse, e il display OLED SSD1322" /></span>
 								<div class="table-wrapper">
 									<table>
 										<thead>
@@ -126,7 +126,17 @@
 											</tr>
 											<tr>
 												<td>Jack TRRS 3,5 mm</td>
-												<td>Connettore di uscita verso le casse</td>
+												<td>Ingresso AUX verso il PCM1808 (MIC non collegato)</td>
+												<td>analogica</td>
+											</tr>
+											<tr>
+												<td>Relè DPDT</td>
+												<td>Sceglie cosa arriva al jack di uscita: DAC PCM5102A (a riposo) o pass-through</td>
+												<td>GPIO</td>
+											</tr>
+											<tr>
+												<td>Jack 3,5 mm di uscita</td>
+												<td>Connettore verso le casse</td>
 												<td>analogica</td>
 											</tr>
 											<tr>
@@ -137,6 +147,34 @@
 										</tbody>
 									</table>
 								</div>
+								<h3>Collegamenti</h3>
+								<p>PCM1808 e PCM5102A condividono i clock I²S (BCK e LRCK): l'ESP32 li genera e i due
+								convertitori lavorano alla stessa frequenza di campionamento.</p>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr>
+												<th>GPIO</th>
+												<th>Funzione</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr><td>4</td><td>OLED RST</td></tr>
+											<tr><td>5</td><td>OLED CS</td></tr>
+											<tr><td>18</td><td>OLED SCK</td></tr>
+											<tr><td>19</td><td>OLED DC</td></tr>
+											<tr><td>21</td><td>PCM5102A DIN</td></tr>
+											<tr><td>23</td><td>OLED MOSI</td></tr>
+											<tr><td>26</td><td>I²S BCK condiviso (PCM5102A e PCM1808)</td></tr>
+											<tr><td>27</td><td>Comando relè (proposto)</td></tr>
+											<tr><td>33</td><td>I²S LRCK condiviso (PCM5102A e PCM1808)</td></tr>
+											<tr><td>35</td><td>PCM1808 DOUT</td></tr>
+										</tbody>
+									</table>
+								</div>
+								<p>Alimentazioni: PCM5102A, PCM1808 e relè a 5 V, display a 3,3 V.
+								Lo schema completo, con le note e i punti ancora da chiarire, è nello
+								<a href="https://github.com/RikyM06/WaveBox/blob/main/docs/schema_elettrico.md">schema elettrico</a>.</p>
 								<p>L'uscita del PCM5102A è di <strong>linea</strong>: servono casse <strong>amplificate</strong>.
 								Per casse passive va aggiunto un amplificatore (per esempio PAM8403 o TPA3116).</p>
 								<h3>Firmware</h3>
@@ -154,8 +192,10 @@
 								<p>Nel branch <code>tentativo_08</code> il firmware è un passthrough: legge l'audio dall'ADC PCM1808 via I²S,
 								lo inoltra al DAC PCM5102A con volume al 50% e mostra sulla seriale il livello di ogni canale in dBFS.
 								Bluetooth e display non sono presenti in questa versione.</p>
+								<p>Il firmware deve ancora essere adattato allo schema elettrico: oggi il PCM1808 usa pin e clock I²S separati
+								dal DAC, e relè e display non sono gestiti.</p>
 								<p>Il prossimo passo è applicare le migliorie e riportare Bluetooth A2DP e spettro su OLED.
-								<a href="https://github.com/RikyM06/WaveBox/blob/tentativo_08/docs/tentativo_08.md">Dettagli delle modifiche</a>.</p>
+								<a href="https://github.com/RikyM06/WaveBox/blob/main/docs/tentativo_08.md">Dettagli delle modifiche</a>.</p>
 							</section>
 
 						<!-- Open source -->
@@ -220,4 +260,4 @@
 
 	</body>
 </html>
-<!-- Data ultimo aggiornamento: 20/10/2026 -->
+<!-- Data ultimo aggiornamento: 21/10/2026 -->
