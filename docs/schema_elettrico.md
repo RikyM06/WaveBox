@@ -2,6 +2,8 @@
 
 Collegamenti delle schede di WaveBox, secondo le specifiche ricevute il 21/10/2026. È lo schema di riferimento per costruire il dispositivo: il firmware attuale (branch `main`) non lo segue ancora del tutto, le differenze sono in [Confronto con il firmware attuale](#confronto-con-il-firmware-attuale).
 
+I collegamenti si possono esplorare anche nel [modello 3D interattivo](https://rikym06.github.io/WaveBox/schema_3d.html) sul sito del progetto.
+
 ## 1. PCM5102A – Uscita audio
 
 | PCM5102A | ESP32 |
@@ -138,3 +140,4 @@ Da chiarire con chi ha fornito le specifiche:
 3. Da dove arriva il segnale "Audio pass-through" sui contatti NO del relè (per esempio direttamente dal jack di ingresso).
 4. GPIO 27 per il relè è "proposto": confermarlo, insieme al modulo relè (tensione, livello logico, attivo alto o basso).
 5. Standard (CTIA o OMTP) del jack TRRS di ingresso.
+6. Massa del jack di uscita: lo schema collega solo L e R tramite il relè, va indicato dove va il GND del jack (per esempio ad AGND del PCM5102A).

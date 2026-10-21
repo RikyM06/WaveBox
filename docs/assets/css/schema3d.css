@@ -1,0 +1,122 @@
+/* Modello 3D dello schema elettrico (schema_3d.html) */
+
+#scena-3d {
+	position: relative;
+	width: 100%;
+	height: clamp(22em, 64vh, 40em);
+	margin: 0 0 1.5em 0;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #f4f5f9;
+	touch-action: none;
+}
+
+	#scena-3d canvas {
+		display: block;
+	}
+
+	#scena-3d .attesa-3d {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		right: 0;
+		margin: 0;
+		text-align: center;
+		transform: translateY(-50%);
+	}
+
+	#scena-3d.pronto .attesa-3d {
+		display: none;
+	}
+
+	#scena-3d.senza-webgl {
+		height: auto;
+		padding: 2em;
+	}
+
+	#scena-3d .etichette-3d {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		pointer-events: none;
+	}
+
+.modulo-3d {
+	background: rgba(255, 255, 255, 0.88);
+	border-radius: 4px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+	color: #4a4a4a;
+	font-size: 0.8em;
+	font-weight: 400;
+	line-height: 1.5;
+	padding: 0 0.5em;
+	white-space: nowrap;
+}
+
+.pin-3d {
+	background: rgba(33, 37, 41, 0.78);
+	border-radius: 3px;
+	color: #ffffff;
+	font-size: 0.6em;
+	line-height: 1.4;
+	padding: 0 0.3em;
+	white-space: nowrap;
+}
+
+#tooltip-3d {
+	position: absolute;
+	z-index: 2;
+	max-width: 24em;
+	background: rgba(33, 37, 41, 0.92);
+	border-radius: 6px;
+	color: #ffffff;
+	font-size: 0.8em;
+	line-height: 1.5;
+	padding: 0.4em 0.75em;
+	pointer-events: none;
+}
+
+.comandi-3d {
+	margin-bottom: 1.5em;
+}
+
+	.comandi-3d .actions {
+		margin-bottom: 0.75em;
+	}
+
+.legenda-3d {
+	list-style: none;
+	padding-left: 0;
+}
+
+	.legenda-3d li {
+		padding-left: 0;
+		margin-bottom: 0.4em;
+	}
+
+	.legenda-3d .tratteggio {
+		font-size: 0.9em;
+		margin-top: 0.75em;
+	}
+
+.campione {
+	display: inline-block;
+	width: 1.8em;
+	height: 0.5em;
+	margin-right: 0.5em;
+	border-radius: 1em;
+	vertical-align: middle;
+}
+
+	.campione-tratteggio {
+		background: repeating-linear-gradient(90deg, #8a8fa3 0 0.45em, transparent 0.45em 0.75em);
+	}
+
+#info-3d h3 {
+	margin-bottom: 0.5em;
+}
+
+#info-3d table td {
+	padding: 0.5em 0.75em;
+}

@@ -19,7 +19,7 @@ Il firmware legge l'audio dal PCM1808 via I2S (48 kHz, 32 bit, stereo), lo inolt
 
 ## Hardware
 
-Lo schema elettrico completo, con le note e i punti ancora aperti, è in [docs/schema_elettrico.md](docs/schema_elettrico.md).
+Lo schema elettrico completo, con le note e i punti ancora aperti, è in [docs/schema_elettrico.md](docs/schema_elettrico.md). I collegamenti si possono esplorare anche nel [modello 3D interattivo](https://rikym06.github.io/WaveBox/schema_3d.html) sul sito.
 
 | Scheda | Collegamento all'ESP32 |
 |--------|------------------------|

@@ -52,6 +52,9 @@
 								</header>
 								<p>È lo schema di riferimento per costruire il dispositivo. Il firmware attuale (branch <code>main</code>)
 								non lo segue ancora del tutto: le differenze sono nel <a href="#firmware">confronto con il firmware attuale</a>.</p>
+								<ul class="actions">
+									<li><a href="schema_3d.html" class="button primary">Esplora il modello 3D</a></li>
+								</ul>
 								<span class="image fit"><img src="images/schema-a-blocchi.svg" alt="Schema a blocchi: lo smartphone via Bluetooth e la sorgente AUX tramite jack TRRS e ADC PCM1808 entrano nell'ESP32, che pilota il DAC PCM5102A, il relè di selezione dell'uscita verso il jack e le casse, e il display OLED SSD1322" /></span>
 
 								<h3>1. PCM5102A – Uscita audio</h3>
@@ -262,6 +265,7 @@
 									<li>Da dove arriva il segnale "Audio pass-through" sui contatti NO del relè (per esempio direttamente dal jack di ingresso).</li>
 									<li>GPIO 27 per il relè è "proposto": confermarlo, insieme al modulo relè (tensione, livello logico, attivo alto o basso).</li>
 									<li>Standard (CTIA o OMTP) del jack TRRS di ingresso.</li>
+									<li>Massa del jack di uscita: lo schema collega solo L e R tramite il relè, va indicato dove va il GND del jack (per esempio ad AGND del PCM5102A).</li>
 								</ol>
 							</section>
 
@@ -300,4 +304,4 @@
 
 	</body>
 </html>
-<!-- Data ultimo aggiornamento: 21/10/2026 21:36 -->
+<!-- Data ultimo aggiornamento: 21/10/2026 23:05 -->
